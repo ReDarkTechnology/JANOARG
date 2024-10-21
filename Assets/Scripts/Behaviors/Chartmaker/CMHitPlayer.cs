@@ -24,8 +24,10 @@ public class CMHitPlayer : MonoBehaviour
 
         var styles = PlayerView.main.Manager.PalleteManager.HitStyles;
         int index = hit.CurrentHit.StyleIndex;
+        bool visible = index >= 0 && index < styles.Count;
 
-        Material material = null;
+        Material material = null, mainMaterial;
+        mainMaterial = visible ? styles[index].NormalMaterial : null;
 
         if (hit.CurrentHit.Type == HitObject.HitType.Normal)
         {
@@ -33,14 +35,14 @@ public class CMHitPlayer : MonoBehaviour
             IndicatohRenderers[0].transform.localScale = IndicatohRenderers[1].transform.localScale = new (.25f, .5f, .5f);
             IndicatohRenderers[0].transform.localPosition = new (hit.Length / 2 + .125f, 0, 0);
             IndicatohRenderers[1].transform.localPosition = -IndicatohRenderers[0].transform.localPosition;
-            material = index >= 0 && index < styles.Count ? styles[index].NormalMaterial : null;
+            material = visible ? styles[index].NormalMaterial : null;
         } else if (hit.CurrentHit.Type == HitObject.HitType.Catch)
         {
             Renderer.transform.localScale = new (hit.Length, .25f, .25f);
             IndicatohRenderers[0].transform.localScale = IndicatohRenderers[1].transform.localScale = new (.25f, .5f, .5f);
             IndicatohRenderers[0].transform.localPosition = new (hit.Length / 2 + .125f, 0, 0);
             IndicatohRenderers[1].transform.localPosition = -IndicatohRenderers[0].transform.localPosition;
-            material = index >= 0 && index < styles.Count ? styles[index].CatchMaterial : null;
+            material = visible ? styles[index].CatchMaterial : null;
         }
 
         Vector2 camStart = PlayerView.main.MainCamera.WorldToScreenPoint(IndicatohRenderers[0].transform.position);
@@ -53,11 +55,11 @@ public class CMHitPlayer : MonoBehaviour
             foreach (MeshRenderer ind in IndicatohRenderers) 
             {
                 ind.enabled = Renderer.enabled;
-                ind.sharedMaterial = material;
+                ind.sharedMaterial = mainMaterial;
             }
         }
 
-        if (hit.HoldMesh && index >= 0 && index < styles.Count) 
+        if (hit.HoldMesh && visible) 
         { 
             if (!HoldTail) {
                 HoldTail = Instantiate(PlayerView.main.HoldMeshSample, transform.parent);
@@ -77,7 +79,7 @@ public class CMHitPlayer : MonoBehaviour
             if (!FlickEmblem) {
                 FlickEmblem = Instantiate(PlayerView.main.HoldMeshSample, transform);
             } 
-            FlickEmblem.sharedMaterial = Renderer.material;
+            FlickEmblem.sharedMaterial = mainMaterial;
             FlickEmblem.transform.eulerAngles = PlayerView.main.MainCamera.transform.eulerAngles;
             bool directional = float.IsFinite(hit.CurrentHit.FlickDirection);
             FlickEmblem.GetComponent<MeshFilter>().sharedMesh = directional ? PlayerView.main.ArrowFlickIndicator : PlayerView.main.FreeFlickIndicator;

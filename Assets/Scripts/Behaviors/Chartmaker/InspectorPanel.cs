@@ -82,24 +82,32 @@ public class InspectorPanel : MonoBehaviour
         OnObjectChange();
     }
 
-    public void SetObject(object obj)
+    public void SetObject(object obj, bool? forceAdd = null)
     {
-        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        if (forceAdd ?? (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)))
         {
-            IList listIn = 
-                obj is List<Timestamp> lts ? lts
-              : obj is IList list ? list 
-              : obj is Timestamp tsp ? new List<Timestamp> { tsp }
-              : new List<object> () { obj };
-            IList listTarget = 
-                CurrentTimestamp?.Count > 0 ? CurrentTimestamp
-              : CurrentObject is IList list2 ? list2
-              : new List<object> () { CurrentObject };
-            if (listIn[0]?.GetType() == listTarget[0]?.GetType()) 
+            try 
             {
-                foreach (object item in listTarget) if (!listIn.Contains(item)) listIn.Add(item);
+                IList listIn = 
+                    obj is List<Timestamp> lts ? lts
+                : obj is IList list ? list 
+                : obj is Timestamp tsp ? new List<Timestamp> { tsp }
+                : new List<object> () { obj };
+                IList listTarget = 
+                    CurrentTimestamp?.Count > 0 ? CurrentTimestamp
+                : CurrentObject is IList list2 ? list2
+                : new List<object> () { CurrentObject };
+                if (listIn[0]?.GetType() == listTarget[0]?.GetType()) 
+                {
+                    foreach (object item in listTarget) if (!listIn.Contains(item)) listIn.Add(item);
+                }
+                obj = listIn;
+            } 
+            catch (NotSupportedException e)
+            {
+                Debug.Log(e);
+                Debug.Log("Force add is " + forceAdd);
             }
-            obj = listIn;
         }
         if (obj is Timestamp ts)
         {

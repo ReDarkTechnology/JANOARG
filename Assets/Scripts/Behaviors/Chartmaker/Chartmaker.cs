@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
 public class Chartmaker : MonoBehaviour
@@ -560,7 +561,7 @@ public class Chartmaker : MonoBehaviour
         History.AddAction(action);
         OnHistoryDo();
         OnHistoryUpdate();
-        InspectorPanel.main.SetObject(obj);
+        InspectorPanel.main.SetObject(obj, false);
     }
     public void AddItem(object obj, float startingOffset)
     {
@@ -614,10 +615,10 @@ public class Chartmaker : MonoBehaviour
         }
         AddItem(list);
     }
-    public List<T> DeepClone<T>(List<T> obj) where T : IDeepClonable<T>
+    public IList ListClone(IList obj)
     {
-        List<T> newList = new (); 
-        foreach (object item in obj) newList.Add(DeepClone((T)item)); 
+        List<object> newList = new (); 
+        foreach (object item in obj) newList.Add(SmartClone(item)); 
         return newList;
     }
 
@@ -626,15 +627,9 @@ public class Chartmaker : MonoBehaviour
         return obj.DeepClone();
     }
 
+
     public object SmartClone(object obj) => obj switch {
-        List<Timestamp> lts  => DeepClone(lts),
-        List<BPMStop> lbs    => DeepClone(lbs),
-        List<LaneStyle> lls  => DeepClone(lls),
-        List<HitStyle> lhs   => DeepClone(lhs),
-        List<LaneGroup> llg  => DeepClone(llg),
-        List<Lane> lla       => DeepClone(lla),
-        List<LaneStep> lst   => DeepClone(lst),
-        List<HitObject> lho  => DeepClone(lho),
+        IList list    => ListClone(list),
         Timestamp ts  => ts.DeepClone(),
         BPMStop bs    => bs.DeepClone(),
         LaneStyle ls  => ls.DeepClone(),
@@ -644,7 +639,7 @@ public class Chartmaker : MonoBehaviour
         LaneStep st   => st.DeepClone(),
         HitObject ho  => ho.DeepClone(),
         null          => throw new ArgumentException("Object can't be null"),
-        _             => obj,
+        _             => throw new AssertionException("Unknown object type " + obj.GetType(), "Unknown object type " + obj.GetType()),
     };
 
     public void Undo(int times = 1)
@@ -718,7 +713,7 @@ public class Chartmaker : MonoBehaviour
     {
         if (!CanPaste()) return;
         object obj = SmartClone(ClipboardItem);
-        if (obj is BPMStop or List<BPMStop>)
+        if (obj is BPMStop or List<BPMStop> || obj is IList list && list[0] is BPMStop)
         {
             AddItem(obj, SongSource.time);
         }
@@ -726,7 +721,7 @@ public class Chartmaker : MonoBehaviour
         {
             AddItem(obj, TimelinePanel.main.ToRoundedBeat(CurrentSong.Timing.ToBeat(SongSource.time)));
         }
-        InspectorPanel.main.SetObject(obj);
+        InspectorPanel.main.SetObject(obj, false);
     }
 }
 
