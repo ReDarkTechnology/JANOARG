@@ -14,7 +14,7 @@ public class BorderlessWindow
 {
     public static bool IsFramed;
     public static bool IsMaximized;
-    public static bool IsInTitleBar;
+    public static WindowZone CurrentWindowZone = WindowZone.Client;
 
     public static UnityEvent OnWindowUpdate = new();
 
@@ -123,6 +123,7 @@ public class BorderlessWindow
     const int WM_SETCURSOR = 0x0020;
     const int WM_MOUSEMOVE = 0x0200;
     const int WM_NCHITTEST = 0x0084;
+    const int WM_RBUTTONDOWN = 0x0201;
 
     const uint WS_VISIBLE = 0x10000000;    
     const uint WS_POPUP = 0x80000000;
@@ -319,12 +320,24 @@ public class BorderlessWindow
             UpdateCursor();
             return (IntPtr)(-1);
         }
+        else if (msg == WM_SETCURSOR || msg == WM_MOUSEMOVE) 
+        {
+            var proc = CallWindowProc(oldWndProc, hWnd, msg, wParam, lParam);
+            if (CursorChanger.Cursors.Count <= 0) return proc;
+
+            UpdateCursor();
+            return (IntPtr)(-1);
+        }
         else if (msg == WM_NCHITTEST) 
         {
             var proc = CallWindowProc(oldWndProc, hWnd, msg, wParam, lParam);
             if (IsFramed) return proc;
-
-            return IsInTitleBar ? (IntPtr)2 : proc;
+            return CurrentWindowZone == WindowZone.Client ? proc : (IntPtr)CurrentWindowZone;
+        }
+        else if (msg == WM_RBUTTONDOWN) 
+        {
+            if (CurrentWindowZone == WindowZone.TitleBar) MinimizeWindow();
+            return CallWindowProc(oldWndProc, hWnd, msg, wParam, lParam);
         }
         else 
         {

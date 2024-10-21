@@ -18,6 +18,7 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public TooltipTarget ResizeTooltip;
     public RectTransform ResizeIcon1;
     public RectTransform ResizeIcon2;
+    public RectTransform TopBorder;
     [Header("Window")]
     public Vector2Int defaultWindowSize;
     public Vector2Int borderSize;
@@ -114,6 +115,7 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         ResizeTooltip.Text = maximized ? "Restore" : "Maximize";
         ResizeIcon1.sizeDelta = ResizeIcon2.sizeDelta = maximized ? new(8, 8) : new(10, 10);
+        TopBorder.gameObject.SetActive(!maximized);
     }
 
     public void FinalizeDrag() 
@@ -128,11 +130,11 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData data)
     {
-        BorderlessWindow.IsInTitleBar = true;
+        BorderlessWindow.CurrentWindowZone = WindowZone.TitleBar;
     }
 
     public void OnPointerExit(PointerEventData data)
     {
-        BorderlessWindow.IsInTitleBar = false;
+        BorderlessWindow.CurrentWindowZone = WindowZone.Client;
     }
 }
