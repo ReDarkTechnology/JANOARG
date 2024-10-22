@@ -71,9 +71,7 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (maximized != BorderlessWindow.IsMaximized) 
         {
-            maximized = BorderlessWindow.IsMaximized;
-            ResizeTooltip.Text = maximized ? "Restore" : "Maximize";
-            ResizeIcon1.sizeDelta = ResizeIcon2.sizeDelta = maximized ? new(8, 8) : new(10, 10);
+            OnSizeChange();
         }
         if (framed != BorderlessWindow.IsFramed) 
         {
@@ -113,9 +111,7 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         var rect = BorderlessWindow.GetWindowRect();
         if (!maximized && rect.yMin < 0) BorderlessWindow.MoveWindowDelta(Vector2.up * rect.yMin);
 
-        ResizeTooltip.Text = maximized ? "Restore" : "Maximize";
-        ResizeIcon1.sizeDelta = ResizeIcon2.sizeDelta = maximized ? new(8, 8) : new(10, 10);
-        TopBorder.gameObject.SetActive(!maximized);
+        OnSizeChange();
     }
 
     public void FinalizeDrag() 
@@ -126,6 +122,14 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             if (rect.yMin - Input.mousePosition.y + Screen.height < 1 && !maximized) ResizeWindow();
             else if (rect.yMin < 0) BorderlessWindow.MoveWindowDelta(Vector2.up * rect.yMin);
         }
+    }
+
+    public void OnSizeChange() 
+    {
+        maximized = BorderlessWindow.IsMaximized;
+        ResizeTooltip.Text = maximized ? "Restore" : "Maximize";
+        ResizeIcon1.sizeDelta = ResizeIcon2.sizeDelta = maximized ? new(8, 8) : new(10, 10);
+        TopBorder.gameObject.SetActive(!maximized);
     }
 
     public void OnPointerEnter(PointerEventData data)

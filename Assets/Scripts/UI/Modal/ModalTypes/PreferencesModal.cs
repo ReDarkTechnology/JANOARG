@@ -149,9 +149,11 @@ public class PreferencesModal : Modal
             var storage = Chartmaker.PreferencesStorage;
             
             SpawnForm<FormEntryHeader>("Fun<i>!</i> :D");
-            SpawnForm<FormEntryBool, bool>("More Perfect Hitsounds", () => prefs.PerfectHitsounds, x => {
+            FormEntry entry = SpawnForm<FormEntryBool, bool>("More Perfect Hitsounds", () => prefs.PerfectHitsounds, x => {
                 storage.Set("BO:PerfectHitsounds", prefs.PerfectHitsounds = x); IsDirty = true;
             });
+            TooltipTarget tooltip = entry.TitleLabel.AddComponent<TooltipTarget>();
+            tooltip.Text = "(Use optimized hitsounds for Jersey Club and Future Bass tracks)";
         }
         else if (tab == 4)
         {
