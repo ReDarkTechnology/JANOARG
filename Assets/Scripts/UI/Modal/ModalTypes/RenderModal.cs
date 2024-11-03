@@ -329,18 +329,18 @@ public class RenderModal : Modal
 
         while (time < TimeRange.y)
         {
-            Chartmaker.main.SongSource.time = time;
+            Chartmaker.main.SongSource.time = Mathf.Clamp(time, 0, Chartmaker.main.SongSource.clip.length);
             InformationBar.main.Update();
             PlayerView.main.UpdateObjects();
+            yield return null;
             RenderTexture.active = rtex;
             camera.rect = new Rect(0, 0, tex.width, tex.height); 
             camera.fieldOfView = fov;
             camera.Render();
             tex.ReadPixels(new Rect(0, 0, tex.width, tex.height), 0, 0);
             tex.Apply();
-            var task = File.WriteAllBytesAsync(Path.Combine(framesDir, $"{frames}.png"), tex.EncodeToPNG());
+            File.WriteAllBytes(Path.Combine(framesDir, $"{frames}.png"), tex.EncodeToPNG());
 
-            yield return new WaitUntil(() => task.IsCompleted);
             time += delta;
             frames++;
             if (frames % 100 == 1 && frames != 1) 
