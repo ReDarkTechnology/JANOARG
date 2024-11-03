@@ -127,3 +127,5 @@ MonoBehaviour:
     Value: {r: 0, g: 0, b: 0, a: 0.69803923}
   - Key: ProgressFill
     Value: {r: 1, g: 0.69803923, b: 0, a: 1}
+  - Key: HeaderInactiveBackground
+    Value: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 1}

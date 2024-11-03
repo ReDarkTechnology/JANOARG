@@ -152,7 +152,7 @@ public class PreferencesModal : Modal
             FormEntry entry = SpawnForm<FormEntryBool, bool>("More Perfect Hitsounds", () => prefs.PerfectHitsounds, x => {
                 storage.Set("BO:PerfectHitsounds", prefs.PerfectHitsounds = x); IsDirty = true;
             });
-            TooltipTarget tooltip = entry.TitleLabel.AddComponent<TooltipTarget>();
+            TooltipTarget tooltip = entry.TitleLabel.gameObject.AddComponent<TooltipTarget>();
             tooltip.Text = "(Use optimized hitsounds for Jersey Club and Future Bass tracks)";
         }
         else if (tab == 4)

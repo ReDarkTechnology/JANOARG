@@ -14,6 +14,7 @@ public class BorderlessWindow
 {
     public static bool IsFramed;
     public static bool IsMaximized;
+    public static bool IsActive = true;
     public static WindowZone CurrentWindowZone = WindowZone.Client;
 
     public static UnityEvent OnWindowUpdate = new();
@@ -123,7 +124,7 @@ public class BorderlessWindow
     const int WM_SETCURSOR = 0x0020;
     const int WM_MOUSEMOVE = 0x0200;
     const int WM_NCHITTEST = 0x0084;
-    const int WM_RBUTTONDOWN = 0x0201;
+    const int WM_ACTIVATE = 0x0006;
 
     const uint WS_VISIBLE = 0x10000000;    
     const uint WS_POPUP = 0x80000000;
@@ -334,9 +335,10 @@ public class BorderlessWindow
             if (IsFramed) return proc;
             return CurrentWindowZone == WindowZone.Client ? proc : (IntPtr)CurrentWindowZone;
         }
-        else if (msg == WM_RBUTTONDOWN) 
+        else if (msg == WM_ACTIVATE) 
         {
-            if (CurrentWindowZone == WindowZone.TitleBar) MinimizeWindow();
+            IsActive = wParam != IntPtr.Zero;
+            OnWindowUpdate.Invoke();
             return CallWindowProc(oldWndProc, hWnd, msg, wParam, lParam);
         }
         else 

@@ -16,9 +16,14 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public RectTransform SongDetails;
     [Space]
     public TooltipTarget ResizeTooltip;
-    public RectTransform ResizeIcon1;
-    public RectTransform ResizeIcon2;
+    public GameObject ResizeIconMaximize;
+    public GameObject ResizeIconRestore;
     public RectTransform TopBorder;
+    [Space]
+    public GameObject InactiveBackground;
+    public CanvasGroup LeftGroup;
+    public CanvasGroup CenterGroup;
+    public CanvasGroup RightGroup;
     [Header("Window")]
     public Vector2Int defaultWindowSize;
     public Vector2Int borderSize;
@@ -31,6 +36,7 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     Vector2 mousePos = Vector2.zero;
     public bool maximized { get; private set; }
+    public bool active { get; private set; }
     bool isFullScreen;
 
     bool framed;
@@ -72,6 +78,10 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (maximized != BorderlessWindow.IsMaximized) 
         {
             OnSizeChange();
+        }
+        if (active != BorderlessWindow.IsActive) 
+        {
+            OnActiveChange();
         }
         if (framed != BorderlessWindow.IsFramed) 
         {
@@ -128,9 +138,17 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         maximized = BorderlessWindow.IsMaximized;
         ResizeTooltip.Text = maximized ? "Restore" : "Maximize";
-        ResizeIcon1.sizeDelta = ResizeIcon2.sizeDelta = maximized ? new(8, 8) : new(10, 10);
+        ResizeIconMaximize.SetActive(!maximized);
+        ResizeIconRestore.SetActive(maximized);
         TopBorder.gameObject.SetActive(!maximized);
     }
+    public void OnActiveChange() 
+    {
+        active = BorderlessWindow.IsActive;
+        InactiveBackground.SetActive(!active);
+        LeftGroup.alpha = CenterGroup.alpha = RightGroup.alpha = active ? 1 : 0.5f;
+    }
+
 
     public void OnPointerEnter(PointerEventData data)
     {

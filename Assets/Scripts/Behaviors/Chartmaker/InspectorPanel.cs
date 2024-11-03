@@ -119,15 +119,23 @@ public class InspectorPanel : MonoBehaviour
         }
         else if (obj is IList list)
         {
-            if (list.Count == 0) obj = null;
-            else if (list.Count == 1) obj = list[0];
-
-            CurrentObject = obj;
-            CurrentTimestamp = new ();
-            if (Helper.IsHierarchyObject(obj)) 
+            if (list.Count > 0 && list[0] is Timestamp) 
             {
-                CurrentHierarchyObject = obj;
-                HierarchyPanel.main.UpdateHolderSelection();
+                CurrentTimestamp = new () {};
+                foreach (object item in list) CurrentTimestamp.Add((Timestamp)item);
+            }
+            else 
+            {
+                if (list.Count == 0) obj = null;
+                else if (list.Count == 1) obj = list[0];
+
+                CurrentObject = obj;
+                CurrentTimestamp = new ();
+                if (Helper.IsHierarchyObject(obj)) 
+                {
+                    CurrentHierarchyObject = obj;
+                    HierarchyPanel.main.UpdateHolderSelection();
+                }
             }
         }
         else
