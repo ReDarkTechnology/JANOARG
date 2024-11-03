@@ -41,7 +41,7 @@ public class AboutModal : Modal
 
     public void Update()
     {
-        Content.anchoredPosition += Vector2.up * 15 * Time.deltaTime;
+        Content.anchoredPosition += 15 * Time.deltaTime * Vector2.up;
         if (Content.anchoredPosition.y > Content.rect.height - 400) Content.anchoredPosition -= Vector2.up * Content.rect.height;
     }
 

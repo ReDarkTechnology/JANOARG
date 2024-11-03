@@ -45,11 +45,13 @@ public class ChartManager
             LaneGroup group = (LaneGroup)CurrentChart.Groups[a].Get(pos);
             if (Groups.ContainsKey(group.Name)) Groups[group.Name].Update(group, pos, this);
             else Groups.Add(group.Name, new LaneGroupManager(group, pos, this));
+            Groups[group.Name].isTouched = true;
         }
         foreach (KeyValuePair<string, LaneGroupManager> pair in new Dictionary<string, LaneGroupManager>(Groups))
         {
             if (pair.Value.isDirty) pair.Value.UpdatePosition(this);
-            else Groups.Remove(pair.Key);
+            else if (!pair.Value.isTouched) Groups.Remove(pair.Key);
+            else pair.Value.isTouched = false;
         }
 
         for (int a = 0; a < CurrentChart.Lanes.Count; a++)
@@ -195,6 +197,7 @@ public class LaneGroupManager
     public Vector3 FinalPosition;
     public Quaternion FinalRotation;
     public bool isDirty;
+    public bool isTouched;
 
     public LaneGroupManager(LaneGroup init, float pos, ChartManager main)
     {
@@ -217,7 +220,7 @@ public class LaneGroupManager
     {
         FinalPosition = CurrentGroup.Position;
         FinalRotation = Quaternion.Euler(CurrentGroup.Rotation);
-        if (original == null) original = CurrentGroup.Group;
+        original ??= CurrentGroup.Group;
         if (!string.IsNullOrEmpty(CurrentGroup.Group) && main.Groups.ContainsKey(CurrentGroup.Group))
         {
             LaneGroupManager group = main.Groups[CurrentGroup.Group];
