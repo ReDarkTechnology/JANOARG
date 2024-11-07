@@ -189,6 +189,7 @@ public class InspectorPanel : MonoBehaviour
                 MakeOffsetEntry(() => ts.Offset, x => Chartmaker.main.SetItem(ts, "Offset", x));
 
                 SpawnForm<FormEntryHeader>("General");
+                SpawnForm<FormEntryFloat, float>("Offset", () => ts.Offset, x => Chartmaker.main.SetItem(ts, "Offset", x));
                 SpawnForm<FormEntryFloat, float>("Duration", () => ts.Duration, x => Chartmaker.main.SetItem(ts, "Duration", x));
                 SpawnForm<FormEntryToggleFloat, float>("From", () => ts.From, x => Chartmaker.main.SetItem(ts, "From", x));
                 SpawnForm<FormEntryFloat, float>("To", () => ts.Target, x => Chartmaker.main.SetItem(ts, "Target", x));
