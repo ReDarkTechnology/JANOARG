@@ -162,12 +162,12 @@ public class PreferencesModal : Modal
 
             SpawnForm<FormEntryHeader>("Display");
             SpawnForm<FormEntryBool, bool>("Vertical Sync", () => QualitySettings.vSyncCount > 0, x => {
-                QualitySettings.vSyncCount = x ? 1 : 0; IsDirty = true;
+                storage.Set("GS:VSync", QualitySettings.vSyncCount = x ? 1 : 0); IsDirty = true;
             });
 
             SpawnForm<FormEntryHeader>("Quality");
             var cursorDropdown = SpawnForm<FormEntryDropdown, object>("Anti-Aliasing", () => QualitySettings.antiAliasing, x => {
-                QualitySettings.antiAliasing = (int)x; IsDirty = true;
+                storage.Set("GS:AntiAliasing", QualitySettings.antiAliasing = (int)x); IsDirty = true;
             });
             cursorDropdown.ValidValues.Add(0, "Disabled");
             cursorDropdown.ValidValues.Add(2, "2x MSAA");

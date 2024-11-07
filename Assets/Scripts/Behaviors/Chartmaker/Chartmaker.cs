@@ -753,12 +753,15 @@ public class ChartmakerPrefs
         Theme = storage.Get("AP:Theme", Theme);
         CustomCursors = storage.Get("AP:CustomCursors", CustomCursors);
         UseDefaultWindow = storage.Get("LA:UseDefaultWindow", UseDefaultWindow);
-
-        PerfectHitsounds = storage.Get("BO:PerfectHitsounds", PerfectHitsounds);
+        
+        QualitySettings.vSyncCount = storage.Get("GS:VSync", 1);
+        QualitySettings.antiAliasing = storage.Get("GS:AntiAliasing", 0);
 
         FFTWindow = storage.Get("AL:FFTWindow", FFTWindow);
         FrequencyMin = storage.Get("AL:FrequencyMin", FrequencyMin);
         FrequencyMax = storage.Get("AL:FrequencyMax", FrequencyMax);
         FrequencyScale = storage.Get("AL:FrequencyScale", FrequencyScale);
+
+        PerfectHitsounds = storage.Get("BO:PerfectHitsounds", PerfectHitsounds);
     }
 }
