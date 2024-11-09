@@ -79,8 +79,9 @@ public class VersionCheckerModal : Modal
             DescriptionText.text = new Regex(@"\*(.+)\*", RegexOptions.Multiline).Replace(DescriptionText.text, "<i>$1</i>");
 
             string match = Application.platform switch {
-                RuntimePlatform.WindowsPlayer => "Chartmaker-win64.zip",
-                _ => "Chartmaker-win64.zip",
+                RuntimePlatform.WindowsPlayer => "Chartmaker-win-x86_64.zip",
+                RuntimePlatform.LinuxPlayer => "Chartmaker-linux-x86_64.tar.gz",
+                _ => "Chartmaker-win-x86_64.zip",
             };
 
             LatestAsset = LatestRelease.assets.Find(x => x.name == match);
