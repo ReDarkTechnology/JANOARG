@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -564,42 +565,58 @@ public class InspectorPanel : MonoBehaviour
 
     public void MakeLaneStyleEntry(Lane lane)
     {
-        var dropdown = SpawnForm<FormEntryDropdown, object>("Style Index", () => lane.StyleIndex, x => Chartmaker.main.SetItem(lane, "StyleIndex", x));
+        var dropdown = SpawnForm<FormEntryLinkedDropdown, object>("Style Index", () => lane.StyleIndex, x => Chartmaker.main.SetItem(lane, "StyleIndex", x));
         for (int a = 0; a < Chartmaker.main.CurrentChart.Pallete.LaneStyles.Count; a++) 
         {
             var item = Chartmaker.main.CurrentChart.Pallete.LaneStyles[a];
             dropdown.ValidValues.Add(a, string.IsNullOrWhiteSpace(item.Name) ? "Lane Style " + a : item.Name);
         }
         dropdown.ValidValues.Add(-1, "<i>Invisible</i>");
+        dropdown.LinkButton.onClick.AddListener(() => {
+            if (lane.StyleIndex >= 0 && lane.StyleIndex < Chartmaker.main.CurrentChart.Pallete.LaneStyles.Count)
+                SetObject(Chartmaker.main.CurrentChart.Pallete.LaneStyles[lane.StyleIndex]);
+        });
     }
 
     public void MakeHitStyleEntry(HitObject hit)
     {
-        var dropdown = SpawnForm<FormEntryDropdown, object>("Style Index", () => hit.StyleIndex, x => Chartmaker.main.SetItem(hit, "StyleIndex", x));
+        var dropdown = SpawnForm<FormEntryLinkedDropdown, object>("Style Index", () => hit.StyleIndex, x => Chartmaker.main.SetItem(hit, "StyleIndex", x));
         for (int a = 0; a < Chartmaker.main.CurrentChart.Pallete.HitStyles.Count; a++) 
         {
             var item = Chartmaker.main.CurrentChart.Pallete.HitStyles[a];
             dropdown.ValidValues.Add(a, string.IsNullOrWhiteSpace(item.Name) ? "Hit Style " + a : item.Name);
         }
         dropdown.ValidValues.Add(-1, "<i>Invisible</i>");
+        dropdown.LinkButton.onClick.AddListener(() => {
+            if (hit.StyleIndex >= 0 && hit.StyleIndex < Chartmaker.main.CurrentChart.Pallete.HitStyles.Count)
+                SetObject(Chartmaker.main.CurrentChart.Pallete.HitStyles[hit.StyleIndex]);
+        });
     }
 
     public void MakeLaneGroupEntry(LaneGroup group)
     {
-        var dropdown = SpawnForm<FormEntryDropdown, object>("Parent", () => group.Group ?? "", x => {
+        var dropdown = SpawnForm<FormEntryLinkedDropdown, object>("Parent", () => group.Group ?? "", x => {
             Chartmaker.main.SetItem(group, "Group", x); HierarchyPanel.main.UpdateHierarchy();
         });
         foreach (LaneGroup p in Chartmaker.main.CurrentChart.Groups) if (p != group) dropdown.ValidValues.Add(p.Name, p.Name);
         dropdown.ValidValues.Add("", "<i>None</i>");
+        dropdown.LinkButton.onClick.AddListener(() => {
+            if (!string.IsNullOrEmpty(group.Group))
+                SetObject(Chartmaker.main.CurrentChart.Groups.Find(x => x.Name == group.Group));
+        });
     }
 
     public void MakeLaneGroupEntry(Lane lane)
     {
-        var dropdown = SpawnForm<FormEntryDropdown, object>("Group", () => lane.Group ?? "", x => {
+        var dropdown = SpawnForm<FormEntryLinkedDropdown, object>("Group", () => lane.Group ?? "", x => {
             Chartmaker.main.SetItem(lane, "Group", x); HierarchyPanel.main.UpdateHierarchy();
         });
         foreach (LaneGroup p in Chartmaker.main.CurrentChart.Groups) dropdown.ValidValues.Add(p.Name, p.Name);
         dropdown.ValidValues.Add("", "<i>None</i>");
+        dropdown.LinkButton.onClick.AddListener(() => {
+            if (!string.IsNullOrEmpty(lane.Group))
+                SetObject(Chartmaker.main.CurrentChart.Groups.Find(x => x.Name == lane.Group));
+        });
     }
 
     public void MakeMultiEditForm(IList thing)

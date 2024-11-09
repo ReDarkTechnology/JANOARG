@@ -1193,6 +1193,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: External Link
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8afc80c7b96099a42a3498a77fb25d19
+      internalID: -7162714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1218,6 +1239,7 @@ TextureImporter:
       Discord Icon: -1407520920
       Drive: 506822628
       Error: -900882941
+      External Link: -7162714
       File: 1622769349
       Filter: -2139277041
       Folder: -117557889
