@@ -8,6 +8,9 @@ public class ModalHolder : MonoBehaviour
 
     public List<Modal> Modals;
 
+    public RectTransform NormalModalHolder;
+    public RectTransform PriorityModalHolder;
+
     void Awake() 
     {
         main = this;
@@ -19,7 +22,7 @@ public class ModalHolder : MonoBehaviour
         {
             if (modal is T)
             {
-                return Instantiate(modal, transform) as T;
+                return Instantiate(modal, NormalModalHolder) as T;
             }
         }
         throw new System.Exception();

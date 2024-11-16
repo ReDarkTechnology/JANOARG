@@ -9,7 +9,7 @@ public class FormEntry : MonoBehaviour
 
     public void Start() 
     {
-        TitleLabel.text = Title;
+        gameObject.name = TitleLabel.text = Title;
     }
 }
 

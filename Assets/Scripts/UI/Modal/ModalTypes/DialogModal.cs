@@ -15,6 +15,12 @@ public class DialogModal : Modal
     
     List<DialogModalAction> Actions = new();
 
+    public new void Start() 
+    {
+        base.Start();
+        transform.parent = ModalHolder.main.PriorityModalHolder;
+    }
+
     public void SetDialog(string title, string body, string[] actions, Action<int> onSelect, bool allowX = true)
     {
         TitleLabel.text = title;
