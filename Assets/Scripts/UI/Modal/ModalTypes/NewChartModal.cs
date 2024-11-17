@@ -17,6 +17,8 @@ public class NewChartModal : Modal
     public LayoutElement FormLayout;
     public RectTransform FormHolder;
     public VerticalLayoutGroup FormHolderLayout;
+    [Space]
+    public RectTransform PresetsHolder;
 
     [Header("Data")]
     public string Codename;
@@ -45,21 +47,12 @@ public class NewChartModal : Modal
         var codename = SpawnForm<FormEntryString, string>("Codename", () => Codename, x => Codename = x);
         codename.Field.contentType = TMP_InputField.ContentType.Alphanumeric;
         
-        SpawnForm<FormEntryHeader>("Presets");
-
-        HorizontalLayoutGroup group = new GameObject("Presets", typeof(RectTransform)).AddComponent<HorizontalLayoutGroup>();
-        group.transform.SetParent(FormHolder);
-        group.gameObject.AddComponent<LayoutElement>().minHeight = 24;
-        group.spacing = 1;
-        group.padding = new RectOffset(10, 10, 0, 0);
-
+        Formmaker.main.Spawn<FormEntryHeader>(PresetsHolder, "Presets");
         string[] presetNames = {"Simple", "Normal", "Complex", "Overdrive", "Special"};
         for (int a = 0; a < presetNames.Length; a++)
         {
             int A = a;
-            var button = Formmaker.main.Spawn<FormEntryButton>((RectTransform)group.transform, presetNames[a]);
-            button.Button.transform.SetParent(group.transform);
-            button.gameObject.SetActive(false);
+            var button = Formmaker.main.Spawn<FormEntryButton>(PresetsHolder, presetNames[a]);
             button.TitleLabel.text = presetNames[a];
             button.Button.onClick.AddListener(() => {
                 Codename = A == 4 ? "" : presetNames[A].ToLower();
@@ -74,10 +67,14 @@ public class NewChartModal : Modal
         SpawnForm<FormEntryHeader>("Metadata");
         name = SpawnForm<FormEntryString, string>("Chart Name", () => InitialValues.DifficultyName, x => InitialValues.DifficultyName = x);
         index = SpawnForm<FormEntryInt, int>("Sorting Index", () => InitialValues.DifficultyIndex, x => InitialValues.DifficultyIndex = x);
+        SpawnForm<FormEntrySpace>("");
+        SpawnForm<FormEntryString, string>("Charter Name", () => InitialValues.CharterName, x => InitialValues.CharterName = x);
+        SpawnForm<FormEntryString, string>("Alt Name", () => InitialValues.AltCharterName, x => InitialValues.AltCharterName = x);
+        SpawnForm<FormEntrySpace>("");
         SpawnForm<FormEntryString, string>("Difficulty", () => InitialValues.DifficultyLevel, x => InitialValues.DifficultyLevel = x);
         SpawnForm<FormEntryFloat, float>("Chart Constant", () => InitialValues.ChartConstant, x => InitialValues.ChartConstant = x);
         
-        SpawnForm<FormEntryHeader>("Pallete");
+        SpawnForm<FormEntryHeader>("Palette");
         InitialValues.Pallete.BackgroundColor = song.BackgroundColor;
         InitialValues.Pallete.InterfaceColor = song.InterfaceColor;
         if (InitialValues.Pallete.LaneStyles.Count == 0) InitialValues.Pallete.LaneStyles.Add(new LaneStyle {
