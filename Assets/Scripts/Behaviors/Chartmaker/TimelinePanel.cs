@@ -225,43 +225,49 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             lastLimit = PeekRange;
             lastPlayed = Chartmaker.main.SongSource.isPlaying;
             Metronome metronome = Chartmaker.main.CurrentSong.Timing;
-            float density = (PeekRange.y - PeekRange.x) * metronome.GetStop(PeekRange.x, out _).BPM / TicksHolder.rect.width / 8;
+
             int count = 0;
 
-            Color color = Themer.main.Keys["TimelineTickMain"];
-
-            if (density != 0)
+            if (metronome.Stops.Count > 0)
             {
-                float factor = Mathf.Log(density, SeparationFactor);
-                BeatPosition beat = BeatFloor(metronome.ToBeat(PeekRange.x), Mathf.FloorToInt(factor), SeparationFactor);
-                BeatPosition interval = BeatInterval(Mathf.FloorToInt(factor), SeparationFactor);
-                float end = metronome.ToBeat(PeekRange.y);
-                while (beat < end)
+                float density = (PeekRange.y - PeekRange.x) * metronome.GetStop(PeekRange.x, out _).BPM / TicksHolder.rect.width / 8;
+
+                Color color = Themer.main.Keys["TimelineTickMain"];
+
+                if (density != 0)
                 {
-                    TimelineTick tick;
-                    if (Ticks.Count <= count) Ticks.Add(tick = Instantiate(TickSample, TicksHolder));
-                    else tick = Ticks[count];
+                    float factor = Mathf.Log(density, SeparationFactor);
+                    BeatPosition beat = BeatFloor(metronome.ToBeat(PeekRange.x), Mathf.FloorToInt(factor), SeparationFactor);
+                    BeatPosition interval = BeatInterval(Mathf.FloorToInt(factor), SeparationFactor);
+                    float end = metronome.ToBeat(PeekRange.y);
+                    while (beat < end)
+                    {
+                        TimelineTick tick;
+                        if (Ticks.Count <= count) Ticks.Add(tick = Instantiate(TickSample, TicksHolder));
+                        else tick = Ticks[count];
 
-                    float den = GetSepFactor(beat, SeparationFactor) - factor;
+                        float den = GetSepFactor(beat, SeparationFactor) - factor;
 
-                    RectTransform rt = (RectTransform)tick.transform;
-                    rt.anchorMin = new (
-                        (metronome.ToSeconds(beat) - PeekRange.x) / (PeekRange.y - PeekRange.x),
-                        0f
-                    );
-                    rt.anchorMax = new(rt.anchorMin.x, 1);
+                        RectTransform rt = (RectTransform)tick.transform;
+                        rt.anchorMin = new (
+                            (metronome.ToSeconds(beat) - PeekRange.x) / (PeekRange.y - PeekRange.x),
+                            0f
+                        );
+                        rt.anchorMax = new(rt.anchorMin.x, 1);
 
-                    tick.Image.color = GetBeatColor(beat) * new Color(1, 1, 1, Mathf.Clamp01((Mathf.Pow(1.5f, den) - 1) / (Mathf.Pow(1.5f, 3) - 1)) * .5f);
-                    tick.Label.color = color;
-                    tick.Label.alpha = Mathf.Clamp01(den - 2.5f) * .5f;
-                    if (tick.Label.alpha > 0) tick.Label.text = beat.ToString();
+                        tick.Image.color = GetBeatColor(beat) * new Color(1, 1, 1, Mathf.Clamp01((Mathf.Pow(1.5f, den) - 1) / (Mathf.Pow(1.5f, 3) - 1)) * .5f);
+                        tick.Label.color = color;
+                        tick.Label.alpha = Mathf.Clamp01(den - 2.5f) * .5f;
+                        if (tick.Label.alpha > 0) tick.Label.text = beat.ToString();
 
-                    beat += interval;
-                    count++;
+                        beat += interval;
+                        count++;
 
-                    if (count > 1000) break;
+                        if (count > 1000) break;
+                    }
                 }
             }
+            
             while (Ticks.Count > count)
             {
                 Destroy(Ticks[^1].gameObject);

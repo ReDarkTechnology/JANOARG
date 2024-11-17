@@ -202,22 +202,24 @@ public class InformationBar : MonoBehaviour
         if (VisualizerMode == VisualizerMode.Metronome)
         {
             BPMStop stop = Chartmaker.main.CurrentSong.Timing.GetStop(sec, out _);
-            float sizeX = rect.width / stop.Signature;
+            if (stop != null) {
+                float sizeX = rect.width / stop.Signature;
 
-            Image bar = AddBar();         
-            bar.rectTransform.sizeDelta = new Vector2(sizeX, rect.height);
-            bar.rectTransform.anchoredPosition = new Vector2(Mathf.Floor(barPos) * sizeX, 0);
-            bar.color = color * new Color(1, 1, 1, Mathf.Pow(1 - (barPos % 1), 2));
+                Image bar = AddBar();         
+                bar.rectTransform.sizeDelta = new Vector2(sizeX, rect.height);
+                bar.rectTransform.anchoredPosition = new Vector2(Mathf.Floor(barPos) * sizeX, 0);
+                bar.color = color * new Color(1, 1, 1, Mathf.Pow(1 - (barPos % 1), 2));
 
-            Image bar2 = AddBar();
-            bar2.rectTransform.sizeDelta = new Vector2(sizeX, rect.height * bar.color.a);
-            bar2.rectTransform.anchoredPosition = new Vector2(Mathf.Floor(barPos) * sizeX, 0);
-            bar2.color = color * new Color(1, 1, 1, .5f);
+                Image bar2 = AddBar();
+                bar2.rectTransform.sizeDelta = new Vector2(sizeX, rect.height * bar.color.a);
+                bar2.rectTransform.anchoredPosition = new Vector2(Mathf.Floor(barPos) * sizeX, 0);
+                bar2.color = color * new Color(1, 1, 1, .5f);
 
-            Image bar3 = AddBar();
-            bar3.rectTransform.sizeDelta = new Vector2(sizeX, 1);
-            bar3.rectTransform.anchoredPosition = new Vector2(Mathf.Floor(barPos) * sizeX, rect.height - 1);
-            bar3.color = color * new Color(1, 1, 1, Mathf.Pow(2 - (barPos % 1) * 2, 2));
+                Image bar3 = AddBar();
+                bar3.rectTransform.sizeDelta = new Vector2(sizeX, 1);
+                bar3.rectTransform.anchoredPosition = new Vector2(Mathf.Floor(barPos) * sizeX, rect.height - 1);
+                bar3.color = color * new Color(1, 1, 1, Mathf.Pow(2 - (barPos % 1) * 2, 2));
+            }
         }
         else if (VisualizerMode == VisualizerMode.FrequencyBars)
         {

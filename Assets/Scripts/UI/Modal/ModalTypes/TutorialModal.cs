@@ -228,7 +228,7 @@ public class Tutorials
 {
     public static Tutorial[] tutorials = new [] {
         new Tutorial (
-            "Intro & Open a Playable Song",
+            "Intro & Opening a Playable Song",
             onHomeCondition,
             new TutorialStep[] {
                 new (
@@ -431,7 +431,7 @@ public class Tutorials
             }
         ),
         new Tutorial (
-            "Editing the Playable Song",
+            "Editing Playable Song Information",
             onSongCondition,
             new TutorialStep[] {
                 new (
@@ -449,6 +449,165 @@ public class Tutorials
                     "When the Editor is in the Song view, the Hierarchy view will show the Playable Song object as the hierarchy root."
                     + "\n\nBy selecting it you can change the metadata of the Playable Song (in case you entered some of the fields incorrectly at the song creation step.)",
                     "Content/View/Hierarchy"
+                ),
+                new (
+                    "It is also here that you can find the Cover object. It basically dictates how the game renders the song's illustrtion cover."
+                    + "\n\nAnd for the reason why you don't declare the illustration during the song creation step ...",
+                    "Content/View/Hierarchy->Content/Cover"
+                ),
+                new (
+                    "... a Cover can have multiple layers! This will be used to create a parallax scrolling effect, which we'll demonstrate later on."
+                    + "\n\nTo create a Cover Layer, you just need to click this button here.",
+                    "Content/Picker->Cover Layer",
+                    () => NewCoverLayerModal.main,
+                    "(press this button to continue)"
+                ),
+                new (
+                    "This is the new Cover Layer modal, which you'll need to go through in order to make a Cover Layer.",
+                    "New Cover Layer Modal(Clone)"
+                ),
+                new (
+                    "... Well, in order to do that, you'll need to have a image source, of course."
+                    + "\n\nThese buttons here will allow you to load a cover image from two source: ...",
+                    "New Cover Layer Modal(Clone)->Load"
+                ),
+                new (
+                    "... you can choose to load the cover image from the song's metadata if there is one, or ...",
+                    "New Cover Layer Modal(Clone)->Load/Metadata"
+                ),
+                new (
+                    "... you can choose to do it the traditional way and supply an image file on your computer.",
+                    "New Cover Layer Modal(Clone)->Load/Image File"
+                ),
+                new (
+                    "Either way, once you done it, the modal will show the image on the screen so you can know if you choose the correct image. At that point you can just press the \"Create\" button and a Cover Layer using that image will be created!"
+                ),
+                new (
+                    "... well, after you specify where the Chartmaker should save the resulting image into, of course.",
+                    "New Cover Layer Modal(Clone)->Content/Top"
+                ),
+                new (
+                    "Now's your turn! Try to create a Cover Layer yourself and select it on the Hierarchy to advance to the next step."
+                    + "\n\n(or if your song already have a Cover Layer, you can just select it instead, we just need a Cover Layer selected to have something to demonstrate)",
+                    () => InspectorPanel.main.CurrentObject is CoverLayer,
+                    "(select a Cover Layer to continue)"
+                ),
+                new (
+                    "This is the Inspector, which since you just selected a Cover Layer, is now displaying its properties."
+                    + "\n\nA Cover Layer, besides from the image source, also keeps track of some things: its position, scale, parallax scrolling factor, and whether it's a tiling image.",
+                    "Content/View/Inspector"
+                ),
+                new (
+                    "The Position property moves the Cover Layer a specified amount of units in space."
+                    + "\n\nThe precise unit depends on where the cover is displayed ...",
+                    "Content/View/Inspector->Content/Position"
+                ),
+                new (
+                    "... which you can change using the buttons here to test it.",
+                    "Content/View/Player View->Cover Tools/View Mode"
+                ),
+                new (
+                    "The Panorama view ...",
+                    () => {
+                        PlayerView.main.SetCoverViewMode(CoverViewMode.Panorama);
+                        return true;
+                    },
+                    ""
+                ),
+                new (
+                    "The Panorama view appears when the player selects the song and becomes the background of the screen. This view allows the player to see the most of your cover."
+                    + "\n\nThe view during Panorama view will always be 880 units wide and 200 units tall.",
+                    "Content/View/Player View->Bounding Box"
+                ),
+                new (
+                    "The Icon view ...",
+                    () => {
+                         PlayerView.main.SetCoverViewMode(CoverViewMode.Icon);
+                        return true;
+                    },
+                    ""
+                ),
+                new (
+                    "The Icon view appears when your song appears in a list of songs. Your song's cover will be much smaller during this view so you should frame this into the most dormant object in your cover so the player can identify it quickly in a list of songs."
+                    + "\n\nThe size of the Icon view depends on what is defined in the main Cover object.",
+                    "Content/View/Player View->Bounding Box"
+                ),
+                new (
+                    "The Scale property resizes the Cover Layer."
+                    + "\n\nA scale of 1 means the Cover Layer will be as wide as the Panorama view.",
+                    "Content/View/Inspector->Content/Scale"
+                ),
+                new (
+                    "The Parallax Z property determines the parallax scrolling factor that will be applied to the Cover Layer when the cover moves around."
+                    + "\n\nA value of 0 means the layer moves with the cover.\nA value of 1 means the layer stays stationary when the cover moves, kinda like a windowing effect."
+                    + "\n\nYou can enter a number between 0 and 1 which makes the layer follow the cover frame but slower. You can also enter a number greater than 1 (which makes the layer move in the opposite direction) or a negative number (which makes the layer out-paces the cover frame when it moves.)",
+                    "Content/View/Inspector->Content/Parallax Z"
+                ),
+                new (
+                    "And last but not least, the Tiling property determines if the image should be repeated in both the X and Y axis.",
+                    "Content/View/Inspector->Content/Tiling"
+                ),
+                new (
+                    "Let's go to the Cover object for more...",
+                    "Content/View/Hierarchy->Content/Cover",
+                    () => InspectorPanel.main.CurrentObject is Cover,
+                    "(select this Cover object to continue)"
+                ),
+                new (
+                    "For the parent Cover object, you can change its background color, and the position and size of the Icon view frame.",
+                    "Content/View/Inspector"
+                ),
+                new (
+                    "Alright, that it's for now. I hoped that you now learned to edit Playable Songs' Covers and- wait..."
+                ),
+                new (
+                    "I forgot one very important thing! Silly me."
+                    + "\n\nWhen the editor is in Song view, you can use the Timeline to edit the song's timing information!"
+                    + "\n\nYou should make sure the timing information here is correct before you even do any of the charting, since editing it later on will cause every object that uses beat position information to move accordingly!",
+                    "Content/Timeline"
+                ),
+                new (
+                    "See that one square thing in the Timeline? That's the representation of a BPM Stop!"
+                    + "\n\nA BPM Stop basically tells the game which portion of the song will it have a specific BPM measurement."
+                ),
+                new (
+                    "Now, let's select it...",
+                    () => InspectorPanel.main.CurrentObject is BPMStop,
+                    "(select a BPM Stop to continue)"
+                ),
+                new (
+                    "Since you just select a BPM Stop, its properties are now displayed on the Inspector."
+                    + "\n\nHere you can change its BPM data, starting position, the time signature, and whether it's \"significant\"",
+                    "Content/View/Inspector"
+                ),
+                new (
+                    "This field at the top here is the object's time position. It determines when the BPM Stop will basically \"take effect\"."
+                    + "\n\nFor the first BPM Stop on the list chronologically (the earliest one) this is where the 0th beat position is. For the other BPM stops this is where the BPM changes from the previous BPM to this one."
+                    + "\n\nNote that this is defined is seconds, not milliseconds!",
+                    "Content/View/Inspector->Header/Offset"
+                ),
+                new (
+                    "You might also have noticed that the Signature field only accepts one value instead of two that you'd expect from... well... an actual music time signature."
+                    + "\n\nThis is because the second value (the beat length) is irrelevant in this situation. A beat's length in JANOARG is already defined in absolute units (the BPM) so we don't need to defined another one in relative units (a quarter note, e.t.c...)",
+                    "Content/View/Inspector->Content->Signature"
+                ),
+                new (
+                    "You might have also wondered what this \"Significant\" toggle does. It basically marks the BPM Stop that it is relevant enough to be considered into the song's BPM range calculation."
+                    + "\n\nIf you found yourself, for example, using a BPM Stop to realign the beats of the song because a section of the song has irregular timing, you can unmark the \"Significant\" toggle off so it doesn't actually count as a BPM change noticable enough to be treated as such.",
+                    "Content/View/Inspector->Content->Significant"
+                ),
+                new (
+                    "Alright, that it's for now, for real. I hope that you've learned how to edit Playable Songs' Covers and perfect their Timing information."
+                    + "\n\nWe are now finally be ready to create a Chart and actually start charting for once!"
+                ),
+            }
+        ),
+        new Tutorial (
+            "Creating a New Chart File",
+            onSongCondition,
+            new TutorialStep[] {
+                new (
+                    "In this tutorial, we will learn how to create a Chart file that will contain a sequence of objects representing a difficulty of a song."
                 ),
             }
         ),
