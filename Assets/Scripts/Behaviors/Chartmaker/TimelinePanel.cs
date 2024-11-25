@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -86,7 +87,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     [HideInInspector]
     public List<TMP_Text> StoryboardEntries;
 
-    int TimelineHeight = 8;
+    public int TimelineHeight { get; private set; } = 8;
     int TimelineExpandHeight = 8;
     int TimelineRestoreHeight = 8;
     int ItemHeight = 0;
@@ -1440,21 +1441,33 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         var ahead = history.ActionsAhead.ToArray();
         var behind = history.ActionsBehind.ToArray();
 
-        if (ahead.Length != 0) for (int a = Mathf.Min(ahead.Length, 10) - 1; a >= 0; a--)
+        if (ahead.Length == 0 && behind.Length == 0)
         {
-            int A = a;
-            list.Items.Add(new ContextMenuListAction(ahead[a].GetName(), () => Chartmaker.main.Redo(A + 1), icon: "Redo"));
+            list.Items.Add(new ContextMenuListAction("No edit history", () => {}, _enabled: false));
         }
-
-        list.Items.Add(new ContextMenuListAction(
-            ahead.Length == 0 && behind.Length == 0 ? "No edit history" : "↑ Redo || Undo ↓",
-            () => {}, _enabled: false
-        ));
-
-        if (behind.Length != 0) for (int a = 0; a < Mathf.Min(behind.Length, 10); a++)
+        else 
         {
-            int A = a;
-            list.Items.Add(new ContextMenuListAction(behind[a].GetName(), () => Chartmaker.main.Undo(A + 1), icon: "Undo"));
+            if (ahead.Length != 0) for (int a = Mathf.Min(ahead.Length, 10) - 1; a >= 0; a--)
+            {
+                int A = a;
+                list.Items.Add(new ContextMenuListAction(ahead[a].GetName(), () => Chartmaker.main.Redo(A + 1), icon: "Redo"));
+            }
+            else 
+            {
+                list.Items.Add(new ContextMenuListAction("Nothing to Redo", () => {}, _enabled: false));
+            }
+
+            list.Items.Add(new ContextMenuListSeparator());
+
+            if (behind.Length != 0) for (int a = 0; a < Mathf.Min(behind.Length, 10); a++)
+            {
+                int A = a;
+                list.Items.Add(new ContextMenuListAction(behind[a].GetName(), () => Chartmaker.main.Undo(A + 1), icon: "Undo"));
+            }
+            else 
+            {
+                list.Items.Add(new ContextMenuListAction("Nothing to Undo", () => {}, _enabled: false));
+            }
         }
 
         ContextMenuHolder.main.OpenRoot(list, EditHistoryHolder, ContextMenuDirection.Up);

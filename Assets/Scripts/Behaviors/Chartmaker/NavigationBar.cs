@@ -8,8 +8,8 @@ public class NavigationBar : MonoBehaviour
     [Header("Objects")]
     public RectTransform FileButton;
     public RectTransform EditButton;
-    public RectTransform ToolsButton;
-    public RectTransform GlobalsButton;
+    public RectTransform ViewButton;
+    public RectTransform OptionsButton;
     public RectTransform HelpButton;
     public RectTransform MenuButton;
 
@@ -25,14 +25,14 @@ public class NavigationBar : MonoBehaviour
         ContextMenuHolder.main.OpenRoot(GetEditMenu(), EditButton);
     }
 
-    public void OpenToolsMenu()
+    public void OpenViewMenu()
     {
-        ContextMenuHolder.main.OpenRoot(GetToolsMenu(), ToolsButton);
+        ContextMenuHolder.main.OpenRoot(GetViewMenu(), ViewButton);
     }
 
-    public void OpenGlobalsMenu()
+    public void OpenOptionsMenu()
     {
-        ContextMenuHolder.main.OpenRoot(GetGlobalsMenu(), GlobalsButton);
+        ContextMenuHolder.main.OpenRoot(GetOptionsMenu(), OptionsButton);
     }
 
     public void OpenHelpMenu()
@@ -47,7 +47,8 @@ public class NavigationBar : MonoBehaviour
             ContextMenuHolder.main.OpenRoot(new ContextMenuList(
                 new ContextMenuListSublist("File", GetFileMenu().Items.ToArray()),
                 new ContextMenuListSublist("Edit", GetEditMenu().Items.ToArray()),
-                new ContextMenuListSublist("Globals", GetGlobalsMenu().Items.ToArray()),
+                new ContextMenuListSublist("View", GetEditMenu().Items.ToArray()),
+                new ContextMenuListSublist("Options", GetOptionsMenu().Items.ToArray()),
                 new ContextMenuListSublist("Help", GetHelpMenu().Items.ToArray())
             ), MenuButton);
         }
@@ -55,7 +56,8 @@ public class NavigationBar : MonoBehaviour
         {
             ContextMenuHolder.main.OpenRoot(new ContextMenuList(
                 new ContextMenuListSublist("File", GetFileMenu().Items.ToArray()),
-                new ContextMenuListSublist("Globals", GetGlobalsMenu().Items.ToArray()),
+                new ContextMenuListSublist("View", GetEditMenu().Items.ToArray()),
+                new ContextMenuListSublist("Options", GetOptionsMenu().Items.ToArray()),
                 new ContextMenuListSublist("Help", GetHelpMenu().Items.ToArray())
             ), MenuButton);
         }
@@ -122,16 +124,29 @@ public class NavigationBar : MonoBehaviour
         );
     }
 
-    public ContextMenuList GetToolsMenu()
+    public ContextMenuList GetViewMenu()
     {
         return new ContextMenuList(
-            new ContextMenuListSublist("Modules", 
-                new ContextMenuListAction("Import Module...", () => {})
-            )
+            new ContextMenuListSublist("Show", 
+                new ContextMenuListAction("Hierarchy Panel", () => {
+                    if (HierarchyPanel.main.IsCollapsed) HierarchyPanel.main.Restore();
+                    else HierarchyPanel.main.Collapse();
+                }, _checked: !HierarchyPanel.main.IsCollapsed),
+                new ContextMenuListAction("Inspector Panel", () => {
+                    if (InspectorPanel.main.IsCollapsed) InspectorPanel.main.Restore();
+                    else InspectorPanel.main.Collapse();
+                }, _checked: !InspectorPanel.main.IsCollapsed),
+                new ContextMenuListAction("Timeline Panel", () => {
+                    if (TimelinePanel.main.TimelineHeight > 0) TimelinePanel.main.Collapse();
+                    else TimelinePanel.main.Restore();
+                }, _checked: TimelinePanel.main.TimelineHeight > 0)
+            ),
+            new ContextMenuListSeparator(),
+            new ContextMenuListSublist("Visualizer", InformationBar.main.GetVisualizerMenu())
         );
     }
 
-    public ContextMenuList GetGlobalsMenu()
+    public ContextMenuList GetOptionsMenu()
     {
         return new ContextMenuList(
             new ContextMenuListAction("Preferences...", () => ModalHolder.main.Spawn<PreferencesModal>()),

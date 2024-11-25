@@ -86,8 +86,19 @@ public class ColorPicker : MonoBehaviour
     public void Open()
     {
         gameObject.SetActive(isOpen = true);
+
+        // Set popup position to mouse pointer position
+        RectTransform rt = (RectTransform)transform;
+        RectTransform parent = (RectTransform)rt.parent;
+        rt.anchoredPosition = (Vector2)Input.mousePosition - parent.rect.size / 2;
+        Rect rect = rt.rect;
+        rect.position += rt.anchoredPosition;
+        if (rect.xMin < parent.rect.width / -2) rt.anchoredPosition += Vector2.right * (-rect.xMin - parent.rect.width / 2);
+        if (rect.xMax > parent.rect.width / 2) rt.anchoredPosition += Vector2.left * (rect.xMax - parent.rect.width / 2);
+        if (rect.yMin < parent.rect.height / -2) rt.anchoredPosition += Vector2.up * (-rect.yMin - parent.rect.height / 2);
+        if (rect.yMax > parent.rect.height / 2) rt.anchoredPosition += Vector2.down * (rect.yMax - parent.rect.height / 2);
+
         StartCoroutine(Intro());
-        ((RectTransform)transform).anchoredPosition = new Vector2(-50, 500);
         UpdateHSV();
         UpdateHex();
         recursionBuster = true;

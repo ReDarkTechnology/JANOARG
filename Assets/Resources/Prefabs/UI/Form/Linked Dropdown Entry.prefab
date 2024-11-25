@@ -714,6 +714,7 @@ GameObject:
   - component: {fileID: 771622811641622686}
   - component: {fileID: 6612844060259324064}
   - component: {fileID: 5660158457361550639}
+  - component: {fileID: 415675190531532493}
   m_Layer: 5
   m_Name: Link
   m_TagString: Untagged
@@ -874,6 +875,21 @@ MonoBehaviour:
   SelectedID: 
   PressedID: ControlPressed
   DisabledID: 
+--- !u!114 &415675190531532493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8498333588609545493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3575a8e2f3f824ba92bd05325e044a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: Select Item
+  Delay: 1
+  PositionMode: 0
 --- !u!1 &8724362542127185767
 GameObject:
   m_ObjectHideFlags: 0

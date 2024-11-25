@@ -375,11 +375,16 @@ public class InformationBar : MonoBehaviour
 
     public void ShowVisualizerMenu()
     {
-        ContextMenuListAction VisItem (string name, VisualizerMode mode) 
-            => new ContextMenuListAction(name, () => SwitchVisualizer(mode), _checked: VisualizerMode == mode);
-
         print("Showing visualizer menu");
-        ContextMenuHolder.main.OpenRoot(new ContextMenuList(
+        ContextMenuHolder.main.OpenRoot(new ContextMenuList(GetVisualizerMenu()), Visualizer, offset: new (2, -4));
+    }
+
+    public ContextMenuListItem[] GetVisualizerMenu() 
+    {
+        ContextMenuListAction VisItem (string name, VisualizerMode mode) 
+            => new (name, () => SwitchVisualizer(mode), _checked: VisualizerMode == mode);
+
+        return new ContextMenuListItem[] {
             VisItem("Metronome", VisualizerMode.Metronome),
             new ContextMenuListSeparator(),
             VisItem("Classic Bars", VisualizerMode.FrequencyBars),
@@ -388,7 +393,7 @@ public class InformationBar : MonoBehaviour
             VisItem("Glowing Piano", VisualizerMode.PitchLines),
             new ContextMenuListSeparator(),
             VisItem("Disabled", VisualizerMode.None)
-        ), Visualizer, offset: new (2, -4));
+        };
     }
 }
 

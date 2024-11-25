@@ -2577,7 +2577,7 @@ GameObject:
   - component: {fileID: 95651235}
   - component: {fileID: 95651236}
   m_Layer: 5
-  m_Name: Globals
+  m_Name: Options
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2713,7 +2713,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1445882522}
         m_TargetAssemblyTypeName: NavigationBar, Assembly-CSharp
-        m_MethodName: OpenGlobalsMenu
+        m_MethodName: OpenOptionsMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4861,6 +4861,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 991738708329899224, guid: e80178b1921fb334c8ade4073a6bf4df, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 991738708329899225, guid: e80178b1921fb334c8ade4073a6bf4df, type: 3}
+      propertyPath: m_Padding.m_Right
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 991738708329899231, guid: e80178b1921fb334c8ade4073a6bf4df, type: 3}
@@ -19686,7 +19690,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -20314,10 +20318,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1242564916}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30.01, y: -14}
-  m_SizeDelta: {x: 60.02, y: 28}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &994964770
 MonoBehaviour:
@@ -20339,7 +20343,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Tools
+  m_text: View
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3f796aa8b18de334cb25c2d1c591948a, type: 2}
   m_sharedMaterial: {fileID: -6645923801699503097, guid: 3f796aa8b18de334cb25c2d1c591948a, type: 2}
@@ -20428,7 +20432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 112007ee840cdb34d86a376beb511d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
+  Target: {fileID: 994964770}
   ID: Content0
 --- !u!1 &1006085140
 GameObject:
@@ -26258,12 +26262,12 @@ GameObject:
   - component: {fileID: 1242564922}
   - component: {fileID: 1242564923}
   m_Layer: 5
-  m_Name: Tools
+  m_Name: View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1242564916
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26279,10 +26283,10 @@ RectTransform:
   - {fileID: 994964769}
   m_Father: {fileID: 482193825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 135.63, y: -14}
-  m_SizeDelta: {x: 60.02, y: 28}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1242564919
 MonoBehaviour:
@@ -26394,7 +26398,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1445882522}
         m_TargetAssemblyTypeName: NavigationBar, Assembly-CSharp
-        m_MethodName: OpenToolsMenu
+        m_MethodName: OpenViewMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26416,7 +26420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 411d004449a8cf44b9c3bd227ba8e8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
+  Target: {fileID: 1242564922}
   NormalID: 
   HighlightedID: ControlHighlighted
   SelectedID: 
@@ -30323,8 +30327,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FileButton: {fileID: 1217243493}
   EditButton: {fileID: 931492228}
-  ToolsButton: {fileID: 1242564916}
-  GlobalsButton: {fileID: 95651229}
+  ViewButton: {fileID: 1242564916}
+  OptionsButton: {fileID: 95651229}
   HelpButton: {fileID: 1557507902}
   MenuButton: {fileID: 1740044089}
 --- !u!114 &1445882523
@@ -37718,6 +37722,7 @@ MonoBehaviour:
   WindowControls: {fileID: 679655759}
   NavBar: {fileID: 1445882518}
   ContentHolder: {fileID: 955738942}
+  ContextMenuHolder: {fileID: 2125735973}
   ModalHolder: {fileID: 261577213}
   LoaderHolder: {fileID: 1758491620}
   MenuButton: {fileID: 1898418560}
@@ -40744,7 +40749,7 @@ PrefabInstance:
     - target: {fileID: 1056461068, guid: e571e76c8148dcc49af4f7116d212e24, type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 2100000, guid: fa7f4ca18b852c34ca58dc9414721aa3, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 1056461070, guid: e571e76c8148dcc49af4f7116d212e24, type: 3}
       propertyPath: m_UseGraphicAlpha
       value: 0
@@ -45428,7 +45433,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Globals
+  m_text: Options
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3f796aa8b18de334cb25c2d1c591948a, type: 2}
   m_sharedMaterial: {fileID: -6645923801699503097, guid: 3f796aa8b18de334cb25c2d1c591948a, type: 2}
@@ -46477,8 +46482,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0, y: -28}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2125735974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50497,11 +50502,11 @@ RectTransform:
   - {fileID: 8853949432106765785}
   m_Father: {fileID: 2125735973}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 250, y: 500}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 600}
   m_SizeDelta: {x: 240, y: 0}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8853949432568168608
 MonoBehaviour:
   m_ObjectHideFlags: 0

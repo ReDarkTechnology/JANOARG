@@ -306,7 +306,7 @@ public class InspectorPanel : MonoBehaviour
 
                 SpawnForm<FormEntryHeader>("Properties");
                 SpawnForm<FormEntryFloat, float>("BPM", () => stop.BPM, x => Chartmaker.main.SetItem(stop, "BPM", x));
-                SpawnForm<FormEntryFloat, float>("Signature", () => stop.Signature, x => Chartmaker.main.SetItem(stop, "Signature", x));
+                SpawnForm<FormEntryInt, int>("Signature", () => stop.Signature, x => Chartmaker.main.SetItem(stop, "Signature", x));
                 SpawnForm<FormEntryHeader>("Flags");
                 SpawnForm<FormEntryBool, bool>("Significant", () => stop.Significant, x => Chartmaker.main.SetItem(stop, "Significant", x));
             }

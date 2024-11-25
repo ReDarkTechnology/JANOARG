@@ -69,7 +69,7 @@ public class NewChartModal : Modal
         index = SpawnForm<FormEntryInt, int>("Sorting Index", () => InitialValues.DifficultyIndex, x => InitialValues.DifficultyIndex = x);
         SpawnForm<FormEntrySpace>("");
         SpawnForm<FormEntryString, string>("Charter Name", () => InitialValues.CharterName, x => InitialValues.CharterName = x);
-        SpawnForm<FormEntryString, string>("Alt Name", () => InitialValues.AltCharterName, x => InitialValues.AltCharterName = x);
+        SpawnForm<FormEntryString, string>("Alt Charter Name", () => InitialValues.AltCharterName, x => InitialValues.AltCharterName = x);
         SpawnForm<FormEntrySpace>("");
         SpawnForm<FormEntryString, string>("Difficulty", () => InitialValues.DifficultyLevel, x => InitialValues.DifficultyLevel = x);
         SpawnForm<FormEntryFloat, float>("Chart Constant", () => InitialValues.ChartConstant, x => InitialValues.ChartConstant = x);
