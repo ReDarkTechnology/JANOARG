@@ -4,6 +4,7 @@ Shader "UI/Triple Graph"
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
+        _CutoffThreshold ("Cutoff Threshold", Float) = 140
 
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
@@ -79,6 +80,7 @@ Shader "UI/Triple Graph"
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
             float4 _MainTex_ST;
+            float _CutoffThreshold;
 
             float _Values1[64];
             float _Values2[64];
@@ -113,9 +115,9 @@ Shader "UI/Triple Graph"
                 if (IN.texcoord.y < y3) color.a += 0.5;
 
                 color.a *= IN.texcoord.x * IN.texcoord.x * IN.texcoord.y;
-                if (IN.worldPos.y > _ScreenParams.y * 0.5 - 140) 
+                if (IN.worldPos.y > _ScreenParams.y * 0.5 - _CutoffThreshold) 
                 {
-                    float prog = _ScreenParams.y * 0.01 - 1.8 - IN.worldPos.y * 0.02;
+                    float prog = 1 + (_ScreenParams.y * 0.5 - _CutoffThreshold - IN.worldPos.y) * 0.02;
                     color.a *= 1 - (1 - prog) * (1 - prog);
                 }
 

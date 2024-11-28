@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -87,10 +88,23 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (framed != BorderlessWindow.IsFramed) 
         {
             framed = BorderlessWindow.IsFramed;
-            ContentHolder.sizeDelta = ContextMenuHolder.sizeDelta = ModalHolder.sizeDelta = LoaderHolder.sizeDelta = NavBar.anchoredPosition = Vector2.up * (framed ? 0 : -28);
-            MenuButton.SetActive(framed);
-            SongDetails.anchoredPosition = Vector2.right * (framed ? 32 : 4);
+            OnFrameChanged();
         }
+    }
+
+    public void OnFrameChanged()
+    {
+        bool isNavbar = !framed || Chartmaker.Preferences.ForceNavigationBar;
+        ContentHolder.sizeDelta = ContextMenuHolder.sizeDelta = ModalHolder.sizeDelta 
+            = LoaderHolder.sizeDelta = NavBar.anchoredPosition 
+            = Vector2.up * (isNavbar ? -28 : 0);
+        MenuButton.SetActive(!isNavbar);
+
+        TopBorder.gameObject.SetActive(!framed);
+        CenterGroup.gameObject.SetActive(!framed);
+        RightGroup.gameObject.SetActive(!framed);
+
+        SongDetails.anchoredPosition = Vector2.right * (isNavbar ? 4 : 32);
     }
 
     public void ResetWindowSize()
@@ -153,7 +167,7 @@ public class WindowHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData data)
     {
-        BorderlessWindow.CurrentWindowZone = WindowZone.TitleBar;
+        if (!framed) BorderlessWindow.CurrentWindowZone = WindowZone.TitleBar;
     }
 
     public void OnPointerExit(PointerEventData data)

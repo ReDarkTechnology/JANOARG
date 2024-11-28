@@ -4,6 +4,7 @@ Shader "UI/Min Max Graph"
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
+        _CutoffThreshold ("Cutoff Threshold", Float) = 140
 
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
@@ -79,6 +80,7 @@ Shader "UI/Min Max Graph"
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
             float4 _MainTex_ST;
+            float _CutoffThreshold;
 
             float _Values[64];
             float _ValuesMin[64];
@@ -123,7 +125,11 @@ Shader "UI/Min Max Graph"
                 if (abs(IN.texcoord.y - yLineCenter) < yLineHeight) color.a = 1;
 
                 color.a *= IN.texcoord.x * IN.texcoord.x;
-                if (IN.worldPos.y > _ScreenParams.y * 0.5 - 140) color.a *= _ScreenParams.y * 0.01 - 1.8 - IN.worldPos.y * 0.02;
+                if (IN.worldPos.y > _ScreenParams.y * 0.5 - _CutoffThreshold) 
+                {
+                    float prog = 1 + (_ScreenParams.y * 0.5 - _CutoffThreshold - IN.worldPos.y) * 0.02;
+                    color.a *= 1 - (1 - prog) * (1 - prog);
+                }
 
                 #ifdef UNITY_UI_CLIP_RECT
                 color.a *= UnityGet2DClipping(IN.worldPos.xy, _ClipRect);

@@ -41,6 +41,7 @@ public class PreferencesModal : Modal
 
         ClearForm();
 
+        // -------------------------------------------------- General
         if (tab == 0)
         {
             var prefs = Chartmaker.Preferences;
@@ -65,6 +66,7 @@ public class PreferencesModal : Modal
             });
             
         }
+        // -------------------------------------------------- Keybindings
         else if (tab == 1)
         {
             SpawnForm<FormEntrySpace>("");
@@ -84,6 +86,7 @@ public class PreferencesModal : Modal
                 }
             }
         }
+        // -------------------------------------------------- Layout & Appearance
         else if (tab == 2)
         {
             var prefs = Chartmaker.Preferences;
@@ -117,10 +120,13 @@ public class PreferencesModal : Modal
             
             SpawnForm<FormEntryHeader>("Layout");
 
+            FormEntryBool forceNavbar = null;
+
             #if UNITY_STANDALONE_WIN
                 var windowDropdown = SpawnForm<FormEntryDropdown, object>("Window Frame Mode", () => prefs.UseDefaultWindow, x => {
                     bool y = prefs.UseDefaultWindow;
                     storage.Set("LA:UseDefaultWindow", prefs.UseDefaultWindow = (bool)x); IsDirty = true;
+                    if (forceNavbar) forceNavbar.gameObject.SetActive(prefs.UseDefaultWindow);
                     #if !UNITY_EDITOR && UNITY_STANDALONE_WIN 
                         if ((bool)x != y)
                         {
@@ -137,12 +143,24 @@ public class PreferencesModal : Modal
                                 BorderlessWindow.MoveWindowDelta(new(1, 0));
                             }
                         }
+                    #else
+                        if ((bool)x != y)
+                        {
+                            BorderlessWindow.IsFramed = (bool)x;
+                        }
                     #endif
                 });
                 windowDropdown.ValidValues.Add(true, "Native");
                 windowDropdown.ValidValues.Add(false, "Custom");
             #endif
+
+            forceNavbar = SpawnForm<FormEntryBool, bool>("Navigation Bar", () => prefs.ForceNavigationBar, x => {
+                storage.Set("LA:ForceNavigationBar", prefs.ForceNavigationBar = x); IsDirty = true;
+                WindowHandler.main.OnFrameChanged();
+            });
+            forceNavbar.gameObject.SetActive(prefs.UseDefaultWindow || BorderlessWindow.IsFramed);
         }
+        // -------------------------------------------------- Miscellaneous
         else if (tab == 3)
         {
             var prefs = Chartmaker.Preferences;
@@ -155,6 +173,7 @@ public class PreferencesModal : Modal
             TooltipTarget tooltip = entry.TitleLabel.gameObject.AddComponent<TooltipTarget>();
             tooltip.Text = "(Use optimized hitsounds for Jersey Club and Future Bass tracks)";
         }
+        // -------------------------------------------------- Graphics
         else if (tab == 4)
         {
             var prefs = Chartmaker.Preferences;
@@ -174,6 +193,7 @@ public class PreferencesModal : Modal
             cursorDropdown.ValidValues.Add(4, "4x MSAA");
             cursorDropdown.ValidValues.Add(8, "8x MSAA");
         }
+        // -------------------------------------------------- Analysis
         else if (tab == 5)
         {
             var prefs = Chartmaker.Preferences;

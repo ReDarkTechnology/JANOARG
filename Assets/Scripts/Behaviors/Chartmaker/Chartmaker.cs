@@ -742,6 +742,7 @@ public class ChartmakerPrefs
     public FrequencyScale FrequencyScale = FrequencyScale.Mel;
     
     public bool PerfectHitsounds;
+    public bool ForceNavigationBar;
 
     public void Load(Storage storage)
     {
@@ -753,6 +754,7 @@ public class ChartmakerPrefs
         Theme = storage.Get("AP:Theme", Theme);
         CustomCursors = storage.Get("AP:CustomCursors", CustomCursors);
         UseDefaultWindow = storage.Get("LA:UseDefaultWindow", UseDefaultWindow);
+        ForceNavigationBar = storage.Get("LA:ForceNavigationBar", true);
         
         QualitySettings.vSyncCount = storage.Get("GS:VSync", 1);
         QualitySettings.antiAliasing = storage.Get("GS:AntiAliasing", 0);

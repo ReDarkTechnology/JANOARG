@@ -47,7 +47,7 @@ public class NavigationBar : MonoBehaviour
             ContextMenuHolder.main.OpenRoot(new ContextMenuList(
                 new ContextMenuListSublist("File", GetFileMenu().Items.ToArray()),
                 new ContextMenuListSublist("Edit", GetEditMenu().Items.ToArray()),
-                new ContextMenuListSublist("View", GetEditMenu().Items.ToArray()),
+                new ContextMenuListSublist("View", GetViewMenu().Items.ToArray()),
                 new ContextMenuListSublist("Options", GetOptionsMenu().Items.ToArray()),
                 new ContextMenuListSublist("Help", GetHelpMenu().Items.ToArray())
             ), MenuButton);

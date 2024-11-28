@@ -59,6 +59,10 @@ public class DebugStatsInspector : MonoBehaviour
         UpdateMin = Mathf.Max(UpdateMin, Time.unscaledDeltaTime);
         UpdateMax = Mathf.Min(UpdateMax, Time.unscaledDeltaTime);
         UpdateFrames++;
+
+        float cutoffThres = 108 - WindowHandler.main.NavBar.anchoredPosition.y;
+        Debug.Log(cutoffThres);
+
         if (UpdateClock > 0.1f) 
         {
             LaneCountLabel.text = PlayerView.main.Manager?.ActiveLaneCount.ToString() ?? "-";
@@ -89,6 +93,7 @@ public class DebugStatsInspector : MonoBehaviour
                 fpsmax[a] = i >= 0 ? FrameMax[i] / fpsheight : -1e6f;
                 fpsSum += i >= 0 ? FrameHistory[i] : 0;
             }
+            FPSGraphMaterial.SetFloat("_CutoffThreshold", cutoffThres);
             FPSGraphMaterial.SetFloatArray("_Values", fpslist);
             FPSGraphMaterial.SetFloatArray("_ValuesMin", fpsmin);
             FPSGraphMaterial.SetFloatArray("_ValuesMax", fpsmax);
@@ -120,6 +125,7 @@ public class DebugStatsInspector : MonoBehaviour
                 memres[a] = i >= 0 ? ReservedMemory[i] / memheight : -1e6f;
                 memmono[a] = i >= 0 ? MonoMemory[i] / memheight : -1e6f;
             }
+            MemoryGraphMaterial.SetFloat("_CutoffThreshold", cutoffThres);
             MemoryGraphMaterial.SetFloatArray("_Values1", memall);
             MemoryGraphMaterial.SetFloatArray("_Values2", memmono);
             MemoryGraphMaterial.SetFloatArray("_Values3", memres);
