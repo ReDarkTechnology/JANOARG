@@ -303,25 +303,25 @@ public class HierarchyPanel : MonoBehaviour
 
     public void RightClickSelect(HierarchyItem item, HierarchyItemHolder holder) 
     {
-        if (item.Target != null) 
-        {
-            static string KeyOf(string id) => KeyboardHandler.main.Keybindings[id].Keybind.ToString();
+        static string KeyOf(string id) => KeyboardHandler.main.Keybindings[id].Keybind.ToString();
 
-            InspectorPanel.main.SetObject(item.Target);
-            ContextMenuHolder.main.OpenRoot(new ContextMenuList(
-                new ContextMenuListAction("Cut", Chartmaker.main.Cut, KeyOf("ED:Cut"), 
-                    icon: "Cut", _enabled: Chartmaker.main.CanCopy()),
-                new ContextMenuListAction("Copy", Chartmaker.main.Copy, KeyOf("ED:Copy"), 
-                    icon: "Copy", _enabled: Chartmaker.main.CanCopy()),
-                new ContextMenuListAction("Paste <i>" + (Chartmaker.main.CanPaste() ? Chartmaker.GetItemName(Chartmaker.main.ClipboardItem) : ""), Chartmaker.main.Paste, KeyOf("ED:Paste"), 
-                    icon: "Paste", _enabled: Chartmaker.main.CanPaste()),
-                new ContextMenuListSeparator(),
-                new ContextMenuListAction("Rename", () => Rename(holder), KeyOf("ED:Rename"),
-                    _enabled: Chartmaker.main.CanRename()),
-                new ContextMenuListAction("Delete", () => KeyboardHandler.main.Keybindings["ED:Delete"].Invoke(), KeyOf("ED:Delete"), 
-                    _enabled: Chartmaker.main.CanCopy())
-            ), (RectTransform)holder.transform, ContextMenuDirection.Cursor);
-        }
+        InspectorPanel.main.SetObject(item.Target);
+        ContextMenuHolder.main.OpenRoot(new ContextMenuList(
+            new ContextMenuListAction("Cut", Chartmaker.main.Cut, KeyOf("ED:Cut"), 
+                icon: "Cut", _enabled: Chartmaker.main.CanCopy()),
+            new ContextMenuListAction("Copy", Chartmaker.main.Copy, KeyOf("ED:Copy"), 
+                icon: "Copy", _enabled: Chartmaker.main.CanCopy()),
+            new ContextMenuListAction("Paste <i>" + (Chartmaker.main.CanPaste() ? Chartmaker.GetItemName(Chartmaker.main.ClipboardItem) : ""), Chartmaker.main.Paste, KeyOf("ED:Paste"), 
+                icon: "Paste", _enabled: Chartmaker.main.CanPaste()),
+            new ContextMenuListSeparator(),
+            new ContextMenuListAction("Rename", () => Rename(holder), KeyOf("ED:Rename"),
+                _enabled: Chartmaker.main.CanRename()),
+            new ContextMenuListAction("Delete", () => KeyboardHandler.main.Keybindings["ED:Delete"].Invoke(), KeyOf("ED:Delete"), 
+                _enabled: Chartmaker.main.CanCopy()),
+            new ContextMenuListSeparator(),
+            new ContextMenuListAction("Expand Recursively", () => {ExpandRecursively(item); UpdateHolders(); },
+                _enabled: item.Children.Count > 0)
+        ), (RectTransform)holder.transform, ContextMenuDirection.Cursor);
     }
 
     public void RenameCurrent() 
@@ -334,6 +334,13 @@ public class HierarchyPanel : MonoBehaviour
     {
         holder.Rename();
     }
+
+    public void ExpandRecursively(HierarchyItem item) 
+    {
+        item.Expanded = true;
+        foreach (HierarchyItem child in item.Children) if (child.Children.Count > 0) ExpandRecursively(child);
+    }
+
 
     public void OnSearchFieldUpdate() 
     {
