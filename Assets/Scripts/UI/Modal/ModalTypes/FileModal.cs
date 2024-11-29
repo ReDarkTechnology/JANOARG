@@ -124,7 +124,7 @@ public class FileModal : Modal
             {
                 entries.Add(new FileModalEntry {
                     Path = folder,
-                    Text = "<alpha=#77>\\<alpha=#ff>" + Path.GetFileName(folder),
+                    Text = "<alpha=#77>" + Path.DirectorySeparatorChar + "<alpha=#ff>" + Path.GetFileName(folder),
                     IsFolder = true,
                 });
             }
