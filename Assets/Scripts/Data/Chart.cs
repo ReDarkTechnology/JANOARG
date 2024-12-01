@@ -545,10 +545,10 @@ public class Lane : IStoryboardable, IDeepClonable<Lane>
                     
                     return new LanePosition 
                     {
-                        StartPos = new Vector2(Mathf.LerpUnclamped(prev.StartPos.x, step.StartPos.x, Ease.Get(p, step.StartEaseX, step.StartEaseXMode)),
-                            Mathf.LerpUnclamped(prev.StartPos.y, step.StartPos.y, Ease.Get(p, step.StartEaseY, step.StartEaseYMode))),
-                        EndPos = new Vector2(Mathf.LerpUnclamped(prev.EndPos.x, step.EndPos.x, Ease.Get(p, step.EndEaseX, step.EndEaseXMode)),
-                            Mathf.LerpUnclamped(prev.EndPos.y, step.EndPos.y, Ease.Get(p, step.EndEaseY, step.EndEaseYMode))),
+                        StartPos = new Vector2(Mathf.LerpUnclamped(prev.StartPos.x, step.StartPos.x, step.StartEaseX.Get(p)),
+                            Mathf.LerpUnclamped(prev.StartPos.y, step.StartPos.y, step.StartEaseY.Get(p))),
+                        EndPos = new Vector2(Mathf.LerpUnclamped(prev.EndPos.x, step.EndPos.x, step.EndEaseX.Get(p)),
+                            Mathf.LerpUnclamped(prev.EndPos.y, step.EndPos.y, step.EndEaseY.Get(p))),
                         Offset = laneTime < time ? offset + (timeT - t) * step.Speed : BeatPosition.NaN,
                     };
                 }
@@ -633,18 +633,16 @@ public class LaneStep : IStoryboardable, IDeepClonable<LaneStep>
 {
     public BeatPosition Offset = new();
     public Vector2 StartPos;
-    public EaseFunction StartEaseX = EaseFunction.Linear;
-    public EaseMode StartEaseXMode;
-    public EaseFunction StartEaseY = EaseFunction.Linear;
-    public EaseMode StartEaseYMode;
+    public IEaseDirective StartEaseX = new BasicEaseDirective(EaseFunction.Linear, EaseMode.In);
+    public IEaseDirective StartEaseY = new BasicEaseDirective(EaseFunction.Linear, EaseMode.In);
     public Vector2 EndPos;
-    public EaseFunction EndEaseX = EaseFunction.Linear;
-    public EaseMode EndEaseXMode;
-    public EaseFunction EndEaseY = EaseFunction.Linear;
-    public EaseMode EndEaseYMode;
+    public IEaseDirective EndEaseX = new BasicEaseDirective(EaseFunction.Linear, EaseMode.In);
+    public IEaseDirective EndEaseY = new BasicEaseDirective(EaseFunction.Linear, EaseMode.In);
     public float Speed = 1;
 
-    public bool IsLinear => StartEaseX == EaseFunction.Linear && StartEaseY == EaseFunction.Linear && EndEaseX == EaseFunction.Linear && EndEaseY == EaseFunction.Linear;
+    public bool IsLinear => 
+        StartEaseX is BasicEaseDirective sx && StartEaseY is BasicEaseDirective sy && EndEaseX is BasicEaseDirective ex && EndEaseY is BasicEaseDirective ey &&
+        sx.Function == EaseFunction.Linear && sy.Function == EaseFunction.Linear && ex.Function == EaseFunction.Linear && ey.Function == EaseFunction.Linear;
 
     public new static TimestampType[] TimestampTypes = 
     {
@@ -692,14 +690,10 @@ public class LaneStep : IStoryboardable, IDeepClonable<LaneStep>
             Offset = Offset,
             StartPos = new Vector2(StartPos.x, StartPos.y),
             StartEaseX = StartEaseX,
-            StartEaseXMode = StartEaseXMode,
             StartEaseY = StartEaseY,
-            StartEaseYMode = StartEaseYMode,
             EndPos = new Vector2(EndPos.x, EndPos.y),
             EndEaseX = EndEaseX,
-            EndEaseXMode = EndEaseXMode,
             EndEaseY = EndEaseY,
-            EndEaseYMode = EndEaseYMode,
             Speed = Speed,
             Storyboard = Storyboard.DeepClone(),
         };

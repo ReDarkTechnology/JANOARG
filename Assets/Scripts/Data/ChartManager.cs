@@ -350,10 +350,10 @@ public class LaneManager
                 {
                     float x = Math.Max(i / 16f, p);
                     dist = Mathf.Lerp(curr.Distance, next.Distance, x);
-                    verts[index] = new Vector3(Mathf.LerpUnclamped(curr.CurrentStep.StartPos.x, next.CurrentStep.StartPos.x, Ease.Get(x, next.CurrentStep.StartEaseX, next.CurrentStep.StartEaseXMode)),
-                        Mathf.LerpUnclamped(curr.CurrentStep.StartPos.y, next.CurrentStep.StartPos.y, Ease.Get(x, next.CurrentStep.StartEaseY, next.CurrentStep.StartEaseYMode)), dist);
-                    verts[index + 1] = new Vector3(Mathf.LerpUnclamped(curr.CurrentStep.EndPos.x, next.CurrentStep.EndPos.x, Ease.Get(x, next.CurrentStep.EndEaseX, next.CurrentStep.EndEaseXMode)),
-                        Mathf.LerpUnclamped(curr.CurrentStep.EndPos.y, next.CurrentStep.EndPos.y, Ease.Get(x, next.CurrentStep.EndEaseY, next.CurrentStep.EndEaseYMode)), dist);
+                    verts[index] = new Vector3(Mathf.LerpUnclamped(curr.CurrentStep.StartPos.x, next.CurrentStep.StartPos.x, next.CurrentStep.StartEaseX.Get(x)),
+                        Mathf.LerpUnclamped(curr.CurrentStep.StartPos.y, next.CurrentStep.StartPos.y, next.CurrentStep.StartEaseY.Get(x)), dist);
+                    verts[index + 1] = new Vector3(Mathf.LerpUnclamped(curr.CurrentStep.EndPos.x, next.CurrentStep.EndPos.x, next.CurrentStep.EndEaseX.Get(x)),
+                        Mathf.LerpUnclamped(curr.CurrentStep.EndPos.y, next.CurrentStep.EndPos.y, next.CurrentStep.EndEaseY.Get(x)), dist);
                     index += 2;
                     if (x == p || index >= verts.Length) break;
                 }
@@ -462,10 +462,10 @@ public class LaneManager
                     Vector3 nextEnd = Vector3.LerpUnclamped(next.CurrentStep.StartPos, next.CurrentStep.EndPos, xPos + xLength);
                     float x = pEnd;
                     dist = Mathf.Lerp(curr.Distance, next.Distance, x);
-                    verts.Add(new Vector3(Mathf.LerpUnclamped(currStart.x, nextStart.x, Ease.Get(x, next.CurrentStep.StartEaseX, next.CurrentStep.StartEaseXMode)),
-                        Mathf.LerpUnclamped(currStart.y, nextStart.y, Ease.Get(x, next.CurrentStep.StartEaseY, next.CurrentStep.StartEaseYMode)), dist));
-                    verts.Add(new Vector3(Mathf.LerpUnclamped(currEnd.x, nextEnd.x, Ease.Get(x, next.CurrentStep.EndEaseX, next.CurrentStep.EndEaseXMode)),
-                        Mathf.LerpUnclamped(currEnd.y, nextEnd.y, Ease.Get(x, next.CurrentStep.EndEaseY, next.CurrentStep.EndEaseYMode)), dist));
+                    verts.Add(new Vector3(Mathf.LerpUnclamped(currStart.x, nextStart.x, next.CurrentStep.StartEaseX.Get(x)),
+                        Mathf.LerpUnclamped(currStart.y, nextStart.y, next.CurrentStep.StartEaseY.Get(x)), dist));
+                    verts.Add(new Vector3(Mathf.LerpUnclamped(currEnd.x, nextEnd.x, next.CurrentStep.EndEaseX.Get(x)),
+                        Mathf.LerpUnclamped(currEnd.y, nextEnd.y, next.CurrentStep.EndEaseY.Get(x)), dist));
                 }
             }
 
@@ -491,10 +491,10 @@ public class LaneManager
                 {
                     float x = Math.Max(i / 16f, pStart);
                     dist = Mathf.Lerp(curr.Distance, next.Distance, x);
-                    verts.Add(new Vector3(Mathf.LerpUnclamped(currStart.x, nextStart.x, Ease.Get(x, next.CurrentStep.StartEaseX, next.CurrentStep.StartEaseXMode)),
-                        Mathf.LerpUnclamped(currStart.y, nextStart.y, Ease.Get(x, next.CurrentStep.StartEaseY, next.CurrentStep.StartEaseYMode)), dist));
-                    verts.Add(new Vector3(Mathf.LerpUnclamped(currEnd.x, nextEnd.x, Ease.Get(x, next.CurrentStep.EndEaseX, next.CurrentStep.EndEaseXMode)),
-                        Mathf.LerpUnclamped(currEnd.y, nextEnd.y, Ease.Get(x, next.CurrentStep.EndEaseY, next.CurrentStep.EndEaseYMode)), dist));
+                    verts.Add(new Vector3(Mathf.LerpUnclamped(currStart.x, nextStart.x, next.CurrentStep.StartEaseX.Get(x)),
+                        Mathf.LerpUnclamped(currStart.y, nextStart.y, next.CurrentStep.StartEaseY.Get(x)), dist));
+                    verts.Add(new Vector3(Mathf.LerpUnclamped(currEnd.x, nextEnd.x, next.CurrentStep.EndEaseX.Get(x)),
+                        Mathf.LerpUnclamped(currEnd.y, nextEnd.y, next.CurrentStep.EndEaseY.Get(x)), dist));
                     if (x == pStart) break;
                 }
             }
@@ -563,10 +563,10 @@ public class LaneManager
                 
                 return new LanePosition 
                 {
-                    StartPos = new Vector2(Mathf.LerpUnclamped(prevS.StartPos.x, currS.StartPos.x, Ease.Get(p, currS.StartEaseX, currS.StartEaseXMode)),
-                        Mathf.LerpUnclamped(prevS.StartPos.y, currS.StartPos.y, Ease.Get(p, currS.StartEaseY, currS.StartEaseYMode))),
-                    EndPos = new Vector2(Mathf.LerpUnclamped(prevS.EndPos.x, currS.EndPos.x, Ease.Get(p, currS.EndEaseX, currS.EndEaseXMode)),
-                        Mathf.LerpUnclamped(prevS.EndPos.y, currS.EndPos.y, Ease.Get(p, currS.EndEaseY, currS.EndEaseYMode))),
+                    StartPos = new Vector2(Mathf.LerpUnclamped(prevS.StartPos.x, currS.StartPos.x, currS.StartEaseX.Get(p)),
+                        Mathf.LerpUnclamped(prevS.StartPos.y, currS.StartPos.y, currS.StartEaseY.Get(p))),
+                    EndPos = new Vector2(Mathf.LerpUnclamped(prevS.EndPos.x, currS.EndPos.x, currS.EndEaseX.Get(p)),
+                        Mathf.LerpUnclamped(prevS.EndPos.y, currS.EndPos.y, currS.EndEaseY.Get(p))),
                     Offset = prev.Distance + currS.Speed * speed * (sec - prev.Offset),
                 };
             }

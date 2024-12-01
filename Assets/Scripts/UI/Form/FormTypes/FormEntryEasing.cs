@@ -5,12 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FormEntryEasing : FormEntry<EasingPair>
+public class FormEntryEasing : FormEntry<IEaseDirective>
 {
-    public TMP_Text EaseFunctionLabel;
-    public Button EaseFunctionButton;
-    public TMP_Text EaseModeLabel;
-    public Button EaseModeButton;
+    public TMP_Text ValueLabel;
 
     public new void Start() 
     {
@@ -20,49 +17,16 @@ public class FormEntryEasing : FormEntry<EasingPair>
 
     public void Reset()
     {
-        EaseFunctionLabel.text = Enum.GetName(typeof(EaseFunction), CurrentValue.Function) ?? "Select...";
-        EaseModeLabel.text = 
-            CurrentValue.Mode == EaseMode.In ? "I" :
-            CurrentValue.Mode == EaseMode.Out ? "O" :
-            CurrentValue.Mode == EaseMode.InOut ? "IO" : "Select...";
+        ValueLabel.text = CurrentValue.ToString();
     }
 
-    public void OpenFunctionList()
+    public void OpenPicker()
     {
-        ContextMenuList list = new();
-        foreach (var item in Enum.GetValues(typeof(EaseFunction)))
-        {
-            var Item = item;
-            string name = Enum.GetName(typeof(EaseFunction), item);
-            list.Items.Add(new ContextMenuListAction(name, () => {
-                CurrentValue.Function = (EaseFunction)Item; SetValue(CurrentValue); Reset();
-            }, _checked: CurrentValue.Function == (EaseFunction)Item));
-        }
-        ContextMenuHolder.main.OpenRoot(list, (RectTransform)EaseFunctionButton.transform);
-    }
-
-    public void OpenModeList()
-    {
-        ContextMenuList list = new();
-        foreach (var item in Enum.GetValues(typeof(EaseMode)))
-        {
-            var Item = item;
-            string name = Enum.GetName(typeof(EaseMode), item);
-            list.Items.Add(new ContextMenuListAction(name, () => {
-                CurrentValue.Mode = (EaseMode)Item; SetValue(CurrentValue); Reset();
-            }, _checked: CurrentValue.Mode == (EaseMode)Item));
-        }
-        ContextMenuHolder.main.OpenRoot(list, (RectTransform)EaseModeButton.transform);
-    }
-}
-
-public struct EasingPair {
-    public EaseFunction Function;
-    public EaseMode Mode;
-
-    public EasingPair(EaseFunction function, EaseMode mode)
-    {
-        Function = function;
-        Mode = mode;
+        EasingPicker.main.CurrentEasing = CurrentValue;
+        EasingPicker.main.Open();
+        EasingPicker.main.OnSet = () => {
+            SetValue(EasingPicker.main.CurrentEasing);
+            Reset();
+        };
     }
 }

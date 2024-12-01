@@ -129,3 +129,5 @@ MonoBehaviour:
     Value: {r: 0, g: 1, b: 1, a: 1}
   - Key: HeaderInactiveBackground
     Value: {r: 1, g: 1, b: 1, a: 1}
+  - Key: GraphLine
+    Value: {r: 1, g: 1, b: 1, a: 1}

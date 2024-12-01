@@ -129,3 +129,5 @@ MonoBehaviour:
     Value: {r: 0.8980392, g: 0.4, b: 1, a: 1}
   - Key: HeaderInactiveBackground
     Value: {r: 0.101960786, g: 0.101960786, b: 0.29803923, a: 1}
+  - Key: GraphLine
+    Value: {r: 0.8, g: 0.29803923, b: 1, a: 1}

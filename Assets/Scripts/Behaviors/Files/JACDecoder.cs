@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Globalization;
 using UnityEditor;
 using System.IO;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 public class JACDecoder
 {
@@ -80,8 +82,8 @@ public class JACDecoder
                             Duration = ParseFloat(tokens[3]),
                             Target = ParseFloat(tokens[4]),
                             From = tokens[5] == "_" ? float.NaN : ParseFloat(tokens[5]),
+                            Easing = ParseEasing(tokens[6])
                         };
-                        ParseEasing(tokens[6], out ts.Easing, out ts.EaseMode);
                         currentStoryboard.Add(ts);
                     }
                     else 
@@ -173,13 +175,13 @@ public class JACDecoder
                             LaneStep step = new LaneStep {
                                 Offset = ParseTime(tokens[2]),
                                 StartPos = new Vector2(ParseFloat(tokens[3]), ParseFloat(tokens[4])),
+                                StartEaseX = ParseEasing(tokens[5]),
+                                StartEaseY = ParseEasing(tokens[6]),
                                 EndPos = new Vector2(ParseFloat(tokens[7]), ParseFloat(tokens[8])),
+                                EndEaseX = ParseEasing(tokens[9]),
+                                EndEaseY = ParseEasing(tokens[10]),
                                 Speed = ParseFloat(tokens[11]),
                             };
-                            ParseEasing(tokens[5], out step.StartEaseX, out step.StartEaseXMode);
-                            ParseEasing(tokens[6], out step.StartEaseY, out step.StartEaseYMode);
-                            ParseEasing(tokens[9], out step.EndEaseX, out step.EndEaseXMode);
-                            ParseEasing(tokens[10], out step.EndEaseY, out step.EndEaseYMode);
                             currentObject = step;
                             currentStoryboard = step.Storyboard;
                             currentLane.LaneSteps.Add(step);
@@ -291,13 +293,24 @@ public class JACDecoder
         return (T)System.Enum.Parse(typeof(T), str);
     }
 
-    static void ParseEasing(string str, out EaseFunction easing, out EaseMode easeMode)
+    static IEaseDirective ParseEasing(string str)
     {
+        if (str == "Linear") return new BasicEaseDirective(EaseFunction.Linear, EaseMode.In);
         string[] tokens = str.Split('/');
         if (tokens.Length == 2)
         {
-            easing = (EaseFunction)System.Enum.Parse(typeof(EaseFunction), tokens[0]);
-            easeMode = (EaseMode)System.Enum.Parse(typeof(EaseMode), tokens[1]);
+            if (tokens[0] == "Bezier")
+            {
+                string[] nums = tokens[1].Split(";");
+                return new CubicBezierEaseDirective(
+                    new Vector2(ParseFloat(nums[0]), ParseFloat(nums[1])),
+                    new Vector2(ParseFloat(nums[2]), ParseFloat(nums[3]))
+                );
+            }
+            return new BasicEaseDirective(
+                (EaseFunction)System.Enum.Parse(typeof(EaseFunction), tokens[0]),
+                (EaseMode)System.Enum.Parse(typeof(EaseMode), tokens[1])
+            );
         }
         else 
         {

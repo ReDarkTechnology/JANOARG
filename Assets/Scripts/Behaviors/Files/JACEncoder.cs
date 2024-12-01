@@ -73,7 +73,7 @@ public class JACEncoder
                 + " " + t.Duration.ToString(CultureInfo.InvariantCulture)
                 + " " + t.Target.ToString(CultureInfo.InvariantCulture)
                 + " " + (float.IsFinite(t.From) ? t.From.ToString(CultureInfo.InvariantCulture) : "_")
-                + " " + EncodeEase(t.Easing, t.EaseMode);
+                + " " + EncodeEase(t.Easing);
         }
         return str;
     }
@@ -188,11 +188,11 @@ public class JACEncoder
         string str = "\n" + indent + "+ LaneStep"
             + " " + step.Offset.ToString(CultureInfo.InvariantCulture)
             + " " + EncodeVector(step.StartPos)
-            + " " + EncodeEase(step.StartEaseX, step.StartEaseXMode)
-            + " " + EncodeEase(step.StartEaseY, step.StartEaseYMode)
+            + " " + EncodeEase(step.StartEaseX)
+            + " " + EncodeEase(step.StartEaseY)
             + " " + EncodeVector(step.EndPos)
-            + " " + EncodeEase(step.EndEaseX, step.EndEaseXMode)
-            + " " + EncodeEase(step.EndEaseY, step.EndEaseYMode)
+            + " " + EncodeEase(step.EndEaseX)
+            + " " + EncodeEase(step.EndEaseY)
             + " " + step.Speed.ToString(CultureInfo.InvariantCulture);
 
         str += EncodeStoryboard(step, depth + IndentSize);
@@ -219,9 +219,25 @@ public class JACEncoder
         return str;
     }
 
-    public static string EncodeEase(EaseFunction ease, EaseMode mode)
+    public static string EncodeEase(IEaseDirective ease)
     {
-        return ease + "/" + mode;
+        if (ease is BasicEaseDirective bed) 
+        {
+            if (bed.Function == EaseFunction.Linear) return "Linear";
+            return bed.Function + "/" + bed.Mode;
+        }
+        else if (ease is CubicBezierEaseDirective cbed) 
+        {
+            return "Bezier/" 
+                + cbed.P1.x.ToString(CultureInfo.InvariantCulture) 
+                + ";" + cbed.P1.y.ToString(CultureInfo.InvariantCulture) 
+                + ";" + cbed.P2.x.ToString(CultureInfo.InvariantCulture) 
+                + ";" + cbed.P2.y.ToString(CultureInfo.InvariantCulture);
+        }
+        else 
+        {
+            throw new System.Exception("Unknown ease directive " + ease.GetType().ToString());
+        }
     }
 
     public static string EncodeVector(Vector2 vec)

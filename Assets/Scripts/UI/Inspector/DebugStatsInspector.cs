@@ -61,7 +61,6 @@ public class DebugStatsInspector : MonoBehaviour
         UpdateFrames++;
 
         float cutoffThres = 108 - WindowHandler.main.NavBar.anchoredPosition.y;
-        Debug.Log(cutoffThres);
 
         if (UpdateClock > 0.1f) 
         {

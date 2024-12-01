@@ -194,9 +194,7 @@ public class InspectorPanel : MonoBehaviour
                 SpawnForm<FormEntryFloat, float>("Duration", () => ts.Duration, x => Chartmaker.main.SetItem(ts, "Duration", x));
                 SpawnForm<FormEntryToggleFloat, float>("From", () => ts.From, x => Chartmaker.main.SetItem(ts, "From", x));
                 SpawnForm<FormEntryFloat, float>("To", () => ts.Target, x => Chartmaker.main.SetItem(ts, "Target", x));
-                SpawnForm<FormEntryEasing, EasingPair>("Easing", () => new (ts.Easing, ts.EaseMode), 
-                    x => { Chartmaker.main.SetItem(ts, "Easing", x.Function); Chartmaker.main.SetItem(ts, "EaseMode", x.Mode); }
-                );
+                SpawnForm<FormEntryEasing, IEaseDirective>("Easing", () => ts.Easing, x => Chartmaker.main.SetItem(ts, "Easing", x));
             }
             else if (CurrentTimestamp.Count >= 1)
             {
@@ -480,21 +478,21 @@ public class InspectorPanel : MonoBehaviour
                 SpawnForm<FormEntryHeader>("Transform");
                 SpawnForm<FormEntryVector2, Vector2>("Start Pos", () => step.StartPos, x => Chartmaker.main.SetItem(step, "StartPos", x));
                 SetEase2(
-                    SpawnForm<FormEntryEasing, EasingPair>("", () => new (step.StartEaseX, step.StartEaseXMode), 
-                        x => { Chartmaker.main.SetItem(step, "StartEaseX", x.Function); Chartmaker.main.SetItem(step, "StartEaseXMode", x.Mode);  }
+                    SpawnForm<FormEntryEasing, IEaseDirective>("", () => step.StartEaseX, 
+                        x => Chartmaker.main.SetItem(step, "StartEaseX", x) 
                     ),
-                    SpawnForm<FormEntryEasing, EasingPair>("", () => new (step.StartEaseY, step.StartEaseYMode), 
-                        x => { Chartmaker.main.SetItem(step, "StartEaseY", x.Function); Chartmaker.main.SetItem(step, "StartEaseYMode", x.Mode);  }
+                    SpawnForm<FormEntryEasing, IEaseDirective>("", () => step.StartEaseY, 
+                        x => Chartmaker.main.SetItem(step, "StartEaseY", x) 
                     )
                 );
 
                 SpawnForm<FormEntryVector2, Vector2>("End Pos", () => step.EndPos, x => Chartmaker.main.SetItem(step, "EndPos", x));
                 SetEase2(
-                    SpawnForm<FormEntryEasing, EasingPair>("", () => new (step.EndEaseX, step.EndEaseXMode), 
-                        x => { Chartmaker.main.SetItem(step, "EndEaseX", x.Function); Chartmaker.main.SetItem(step, "EndEaseXMode", x.Mode);  }
+                    SpawnForm<FormEntryEasing, IEaseDirective>("", () => step.EndEaseX, 
+                        x => Chartmaker.main.SetItem(step, "EndEaseX", x) 
                     ),
-                    SpawnForm<FormEntryEasing, EasingPair>("", () => new (step.EndEaseY, step.EndEaseYMode), 
-                        x => { Chartmaker.main.SetItem(step, "EndEaseY", x.Function); Chartmaker.main.SetItem(step, "EndEaseYMode", x.Mode);  }
+                    SpawnForm<FormEntryEasing, IEaseDirective>("", () => step.EndEaseY, 
+                        x => Chartmaker.main.SetItem(step, "EndEaseY", x) 
                     )
                 );
 
@@ -665,9 +663,7 @@ public class InspectorPanel : MonoBehaviour
                     if (typeof(float).IsAssignableFrom(field.FieldType) || field.FieldType == typeof(BeatPosition))
                         lerpDropdown.ValidValues.Add(field.Name, field.Name);
                 }
-                SpawnForm<FormEntryEasing, EasingPair>("Lerp Easing", () => new (lerpHandler.LerpEasing, lerpHandler.LerpEaseMode), 
-                    x => { lerpHandler.LerpEasing = x.Function; lerpHandler.LerpEaseMode = x.Mode; }
-                );
+                SpawnForm<FormEntryEasing, IEaseDirective>("Lerp Easing", () => lerpHandler.LerpEasing, x => lerpHandler.LerpEasing = x);
             }
             
             SpawnForm<FormEntryDropdown, object>("Operation", () => lerpHandler.Operation, 
@@ -695,9 +691,7 @@ public class InspectorPanel : MonoBehaviour
                     if (typeof(float).IsAssignableFrom(field.FieldType) || field.FieldType == typeof(BeatPosition))
                         lerpDropdown.ValidValues.Add(field.Name, field.Name);
                 }
-                SpawnForm<FormEntryEasing, EasingPair>("Lerp Easing", () => new (beatHandler.LerpEasing, beatHandler.LerpEaseMode), 
-                    x => { beatHandler.LerpEasing = x.Function; beatHandler.LerpEaseMode = x.Mode; }
-                );
+                SpawnForm<FormEntryEasing, IEaseDirective>("Lerp Easing", () => beatHandler.LerpEasing, x => beatHandler.LerpEasing = x);
             }
             
             SpawnForm<FormEntryDropdown, object>("Operation", () => beatHandler.Operation, 
@@ -825,7 +819,7 @@ public class InspectorPanel : MonoBehaviour
     {
         easeX.TitleLabel.gameObject.SetActive(false);
         easeY.TitleLabel.gameObject.SetActive(false);
-        easeY.EaseFunctionButton.transform.parent.SetParent(easeX.transform);
+        easeY.ValueLabel.transform.parent.SetParent(easeX.transform);
         easeY.GetComponent<LayoutElement>().minHeight = 0;
         var lg = easeX.GetComponent<HorizontalLayoutGroup>();
         lg.padding.left = 10;
