@@ -17061,7 +17061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3575a8e2f3f824ba92bd05325e044a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text: "Cubic B\xE9zier Easing"
+  Text: "Cubic B\xE9zier Curve"
   Delay: 1
   PositionMode: 2
 --- !u!114 &726885110
@@ -27631,7 +27631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3575a8e2f3f824ba92bd05325e044a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text: Basic Easing
+  Text: Common Curves
   Delay: 1
   PositionMode: 2
 --- !u!114 &1161165819

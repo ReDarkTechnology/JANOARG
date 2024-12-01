@@ -1,11 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
-using UnityEngine.UIElements;
-using Unity.VisualScripting.Dependencies.Sqlite;
-using Unity.VisualScripting;
-using UnityEditor;
 
 [Serializable]
 public enum EaseMode 
@@ -163,7 +158,7 @@ public struct BasicEaseDirective : IEaseDirective
     public override string ToString() 
     {
         if (Function == EaseFunction.Linear) return "Linear";
-        return Function + "/" + Mode;
+        return Function + "/" + (Mode == EaseMode.In ? "I" : Mode == EaseMode.Out ? "O" : "IO");
     }
 }
 
@@ -273,6 +268,6 @@ public struct CubicBezierEaseDirective : IEaseDirective
 
     public override string ToString() 
     {
-        return "Bézier";
+        return "CubicBézier/...";
     }
 }
