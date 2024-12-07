@@ -20,6 +20,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     [Space]
     public int ScrollOffset;
     public int SeparationFactor;
+    public LaneFilterMode LaneFilterMode;
     public float VerticalScale;
     public float VerticalOffset;
     public float ResizeVelocity;
@@ -36,6 +37,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public RectTransform PeekRangeSlider;
     public RectTransform PeekStartSlider;
     public RectTransform PeekEndSlider;
+    public RectTransform SongStartRect;
+    public RectTransform SongEndRect;
     public RectTransform TicksHolder;
     public RectTransform ItemsHolder;
     public RectTransform TailsHolder;
@@ -68,10 +71,11 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public CanvasGroup CopyButtonGroup;
     public CanvasGroup PasteButtonGroup;
     [Space]
-    public GameObject VerticalScaleHolder;
-    public GameObject VerticalOffsetHolder;
+    public GameObject LaneOptionsHolder;
+    public GameObject HitObjectOptionsHolder;
     [Space]
     public TimelineOptionsPanel Options;
+
     [Header("Samples")]
     public TimelineTick TickSample;
     [HideInInspector]
@@ -86,6 +90,12 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public Material StoryboardEntryMaterial;
     [HideInInspector]
     public List<TMP_Text> StoryboardEntries;
+    
+    [Header("Icons")]
+    public Sprite LineIcon;
+    public Sprite BehindIcon;
+    public Sprite NormalHitIcon;
+    public Sprite CatchHitIcon;
 
     public int TimelineHeight { get; private set; } = 8;
     int TimelineExpandHeight = 8;
@@ -196,8 +206,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         HitObjectTab.gameObject.SetActive(HierarchyPanel.main.CurrentMode == HierarchyMode.Chart && InspectorPanel.main.CurrentHierarchyObject is Lane);
         HitObjectTab.interactable = TimelineHeight <= 0 || CurrentMode != TimelineMode.HitObjects;
         
-        VerticalScaleHolder.gameObject.SetActive(CurrentMode == TimelineMode.HitObjects);
-        VerticalOffsetHolder.gameObject.SetActive(CurrentMode == TimelineMode.HitObjects);
+        LaneOptionsHolder.SetActive(CurrentMode == TimelineMode.Lanes);
+        HitObjectOptionsHolder.SetActive(CurrentMode == TimelineMode.HitObjects);
 
         PickerPanel.main.UpdateButtons();
     }
@@ -275,6 +285,15 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                 Ticks.RemoveAt(Ticks.Count - 1);
             }
 
+            SongStartRect.anchorMax = new (
+                Mathf.InverseLerp(PeekRange.x, PeekRange.y, 0), 
+                SongStartRect.anchorMax.y
+            );
+            SongEndRect.anchorMin = new (
+                Mathf.InverseLerp(PeekRange.x, PeekRange.y, Chartmaker.main.CurrentSong.Clip.length), 
+                SongEndRect.anchorMin.y
+            );
+
             UpdateItems();
             UpdateWaveform();
         }
@@ -326,6 +345,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             RectTransform rt = (RectTransform)item.transform;
             rt.anchorMin = rt.anchorMax = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, time), 1);
             item.SetItem(obj);
+            item.Icon.sprite = LineIcon;
             count++;
             return item;
         }
@@ -406,6 +426,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     }
 
                     var item = GetTimelineItem(count);
+                    item.Icon.sprite = LineIcon;
                     RectTransform rt = (RectTransform)item.transform;
                     rt.anchorMin = rt.anchorMax = new (posX, 1);
                     rt.anchoredPosition = new(0, -24 * index - 5);
@@ -443,7 +464,23 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             if (Chartmaker.main.CurrentChart?.Lanes != null)
             {
                 float dOffset = 11 * density;
-                foreach (Lane lane in Chartmaker.main.CurrentChart.Lanes)
+
+                List<Lane> lanes = null;
+
+                if (LaneFilterMode == LaneFilterMode.All)
+                {
+                    lanes = Chartmaker.main.CurrentChart.Lanes;
+                }
+                else if (LaneFilterMode == LaneFilterMode.HierarchyVisible)
+                {
+                    lanes = new();
+                    foreach(HierarchyItemHolder item in HierarchyPanel.main.Holders)
+                    {
+                        if (item.Target.Target is Lane lane) lanes.Add(lane);
+                    }
+                }
+
+                foreach (Lane lane in lanes)
                 {
                     float time = metronome.ToSeconds(lane.LaneSteps[0].Offset);
                     float timeEnd = metronome.ToSeconds(lane.LaneSteps[^1].Offset);
@@ -462,6 +499,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
                         float sposX = InverseLerpUnclamped(PeekRange.x, PeekRange.y, stepTime);
                         var sitem = GetTimelineItem(count);
+                        sitem.Icon.sprite = LineIcon;
                         RectTransform srt = (RectTransform)sitem.transform;
                         srt.anchorMin = srt.anchorMax = new (sposX, 1);
                         srt.anchoredPosition = new(0, -24 * pos - 5);
@@ -472,6 +510,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     }
 
                     float posX = InverseLerpUnclamped(PeekRange.x, PeekRange.y, time);
+                    float posX2 = posX;
                     if (time != timeEnd)
                     {
                         var tail = GetItemTail(tcount);
@@ -485,6 +524,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     }
 
                     var item = GetTimelineItem(count);
+                    item.Icon.sprite = posX != posX2 ? BehindIcon : LineIcon;
                     RectTransform rt = (RectTransform)item.transform;
                     rt.anchorMin = rt.anchorMax = new (posX, 1);
                     rt.anchoredPosition = new(0, -24 * pos - 5);
@@ -549,6 +589,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     if (time < PeekRange.x - dOffset || time > PeekRange.y + dOffset) continue;
 
                     var item = GetTimelineItem(count);
+                    item.Icon.sprite = hit.Type == HitObject.HitType.Normal ? NormalHitIcon : CatchHitIcon;
                     RectTransform rt = (RectTransform)item.transform;
                     rt.anchorMin = rt.anchorMax = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, time), 1);
                     rt.anchoredPosition = new Vector2(0, pos);
@@ -997,6 +1038,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     Vector2 dragStart, dragEnd;
     float timeStart, timeEnd, beatStart, beatEnd;
     public bool isDragged { get; private set; }
+
     PointerEventData lastDrag;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -1395,30 +1437,22 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     break;
                     case TimelinePickerMode.NormalHit or TimelinePickerMode.CatchHit:
                     {
-                        HitObject hit = null;
-
-                        if (InspectorPanel.main.CurrentObject is HitObject baseHit) hit = baseHit.DeepClone();
-                        else hit = new() { Length = 1 };
-
-                        if (isDragged) 
+                        HitObject hit = new();
+                        if (!isDragged) 
                         {
-                            hit.Offset = (BeatPosition)(Math.Min(beatStart, beatEnd));
-                            hit.HoldLength = Math.Abs(beatStart - beatEnd);
-                            float vpStart = .5f - VerticalScale * .5f + VerticalOffset;
-                            float vpEnd = .5f + VerticalScale * .5f + VerticalOffset;
-                            float yStart = Mathf.Lerp(vpStart, vpEnd, Mathf.Round(Mathf.Clamp01(1 - (Mathf.Max(dragStart.y, dragEnd.y) - 4) / (ItemsHolder.rect.height - 8)) / .05f) * .05f);
-                            float yEnd = Mathf.Lerp(vpStart, vpEnd, Mathf.Round(Mathf.Clamp01(1 - (Mathf.Min(dragStart.y, dragEnd.y) - 4) / (ItemsHolder.rect.height - 8)) / .05f) * .05f);
-                            if (yStart != yEnd) 
-                            {
-                                hit.Position = yStart;
-                                hit.Length = yEnd - yStart;
-                            }
-                        } 
-                        else 
-                        {
-                            hit.Offset = (BeatPosition)beatStart;
-                            hit.HoldLength = 0;
+                            dragEnd = dragStart;
+                            beatEnd = beatStart;
                         }
+                        
+                        float vpStart = .5f - VerticalScale * .5f + VerticalOffset;
+                        float vpEnd = .5f + VerticalScale * .5f + VerticalOffset;
+                        float yStart = Mathf.Lerp(vpStart, vpEnd, Mathf.Round(Mathf.Clamp01(1 - (Mathf.Max(dragStart.y, dragEnd.y) - 4) / (ItemsHolder.rect.height - 8)) / .05f) * .05f);
+                        float yEnd = Mathf.Lerp(vpStart, vpEnd, Mathf.Round(Mathf.Clamp01(1 - (Mathf.Min(dragStart.y, dragEnd.y) - 4) / (ItemsHolder.rect.height - 8)) / .05f) * .05f);
+                            
+                        hit.Offset = (BeatPosition)Math.Min(beatStart, beatEnd);
+                        hit.HoldLength = Math.Abs(beatStart - beatEnd);
+                        hit.Length = Options.NewHitObjectLength;
+                        hit.Position = yEnd - hit.Length / 2;
 
                         hit.Type = PickerPanel.main.CurrentTimelinePickerMode == TimelinePickerMode.CatchHit ? HitObject.HitType.Catch : HitObject.HitType.Normal;
 
@@ -1673,4 +1707,10 @@ public enum FrequencyScale
     Logarithmic,
     Mel,
     Bark,
+}
+
+public enum LaneFilterMode 
+{
+    All,
+    HierarchyVisible,
 }

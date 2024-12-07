@@ -23,7 +23,7 @@ public class HierarchyPanel : MonoBehaviour
     public HierarchyItemHolder HolderSample;
     public RectTransform HolderParent;
     List<HierarchyItem> Items = new();
-    List<HierarchyItemHolder> Holders = new();
+    public List<HierarchyItemHolder> Holders = new();
     [Space]
     public TMP_InputField SearchField;
     public Button SearchButton;
@@ -360,6 +360,7 @@ public class HierarchyPanel : MonoBehaviour
     {
         item.Expanded = !item.Expanded;
         UpdateHolders();
+        if (TimelinePanel.main.LaneFilterMode == LaneFilterMode.HierarchyVisible) TimelinePanel.main.UpdateItems();
     }
     
     public void OnResizerDrag()

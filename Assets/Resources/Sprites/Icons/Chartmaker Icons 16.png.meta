@@ -1298,6 +1298,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: New Hit Object Length
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 496
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d93805666364e623bdeb80cb90f7c45
+      internalID: 1171336760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Star
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 480
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 875952079473fd574b8a4aae39edc818
+      internalID: 653783558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1346,6 +1388,7 @@ TextureImporter:
       Maximize: 1690759606
       Metronome: 1393924800
       Music: -1610311330
+      New Hit Object Length: 1171336760
       Next: -46201198
       Palette: -844261610
       Panoram: -170275677
@@ -1358,6 +1401,7 @@ TextureImporter:
       Search: -2128552433
       Separator: -1993552242
       Speed: -401747491
+      Star: 653783558
       Twitter Icon: -654048039
       Undo: 50928159
       Vertical Offset: -818939314

@@ -11,7 +11,7 @@ public class TimelineItem : Selectable, IPointerDownHandler, IPointerClickHandle
     public object Item;
     public Lane Lane;
     public Image Border;
-    public Image Indicator;
+    public Image Icon;
     public Image SelectedBorder;
 
     public virtual new void OnPointerDown(PointerEventData eventData)

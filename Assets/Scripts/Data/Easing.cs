@@ -268,6 +268,6 @@ public struct CubicBezierEaseDirective : IEaseDirective
 
     public override string ToString() 
     {
-        return "CubicBézier/...";
+        return "CubicBézier";
     }
 }

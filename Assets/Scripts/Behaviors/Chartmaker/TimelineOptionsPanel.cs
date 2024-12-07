@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,15 +9,21 @@ public class TimelineOptionsPanel : MonoBehaviour
     [Header("Fields")]
     public float Speed = 1;
     public int SeparationFactor = 2;
+
+    public LaneFilterMode LaneFilterMode = LaneFilterMode.All;
+    public float VerticalScale = 1;
+    public float VerticalOffset = 0;
+    public float NewHitObjectLength = 0.25f;
+
     public bool FollowSeekLine = true;
     public int WaveformIdle = 1;
     public int WaveformMode = 1;
-    public float VerticalScale = 1;
-    public float VerticalOffset = 0;
 
     [Header("Objects")]
+    public TMP_InputField NewHitObjectLengthField;
     public TMP_InputField VerticalScaleField;
     public TMP_InputField VerticalOffsetField;
+    public RectTransform LaneFilterModeButton;
     public TMP_InputField SpeedField;
     public TMP_InputField SeparatorField;
     public Toggle FollowSeekLineToggle;
@@ -50,8 +57,11 @@ public class TimelineOptionsPanel : MonoBehaviour
 
             str.Set("PB:Speed", Speed);
             str.Set("TL:SeparationFactor", SeparationFactor);
+
+            str.Set("TL:LaneFilterMode", LaneFilterMode);
             str.Set("TL:HOVerticalScale", VerticalScale);
             str.Set("TL:HOVerticalOffset", VerticalOffset);
+            str.Set("TL:NewHitObjectLength", NewHitObjectLength);
 
             str.Set("TL:FollowSeekLine", FollowSeekLine);
             str.Set("TL:WaveformIdle", WaveformIdle);
@@ -66,8 +76,11 @@ public class TimelineOptionsPanel : MonoBehaviour
 
         Speed = str.Get("PB:Speed", 1f);
         SeparationFactor = str.Get("TL:SeparationFactor", 2);
+
+        LaneFilterMode = str.Get("TL:LaneFilterMode", LaneFilterMode.All);
         VerticalScale = str.Get("TL:HOVerticalScale", 1f);
         VerticalOffset = str.Get("TL:HOVerticalOffset", 0f);
+        NewHitObjectLength = str.Get("TL:NewHitObjectLength", 0.25f);
 
         FollowSeekLine = str.Get("TL:FollowSeekLine", true);
         WaveformIdle = str.Get("TL:WaveformIdle", 1);
@@ -81,6 +94,11 @@ public class TimelineOptionsPanel : MonoBehaviour
         if (TimelinePanel.main.SeparationFactor != SeparationFactor)
         {
             TimelinePanel.main.SeparationFactor = SeparationFactor;
+            timelineDirty = true;
+        }
+        if (TimelinePanel.main.LaneFilterMode != LaneFilterMode)
+        {
+            TimelinePanel.main.LaneFilterMode = LaneFilterMode;
             timelineDirty = true;
         }
         if (TimelinePanel.main.VerticalScale != VerticalScale)
@@ -102,6 +120,7 @@ public class TimelineOptionsPanel : MonoBehaviour
         SeparatorField.text = SeparationFactor.ToString();
         VerticalScaleField.text = VerticalScale.ToString();
         VerticalOffsetField.text = VerticalOffset.ToString();
+        NewHitObjectLengthField.text = NewHitObjectLength.ToString();
         FollowSeekLineToggle.isOn = FollowSeekLine;
         for (int a = 0; a < WaveformIdleToggles.Count; a++) WaveformIdleToggles[a].isOn = a == WaveformIdle;
         for (int a = 0; a < WaveformModeToggles.Count; a++) WaveformModeToggles[a].isOn = a == WaveformMode;
@@ -116,6 +135,7 @@ public class TimelineOptionsPanel : MonoBehaviour
         int.TryParse(SeparatorField.text, out SeparationFactor);
         float.TryParse(VerticalScaleField.text, out VerticalScale);
         float.TryParse(VerticalOffsetField.text, out VerticalOffset);
+        float.TryParse(NewHitObjectLengthField.text, out NewHitObjectLength);
 
         SeparationFactor = Mathf.Max(SeparationFactor, 2);
         VerticalScale = VerticalScale <= 0 ? 1 : VerticalScale;
@@ -141,5 +161,20 @@ public class TimelineOptionsPanel : MonoBehaviour
     {
         ModalHolder.main.Spawn<PreferencesModal>().SetTab(5);
         GetComponent<PopupPanel>().Close();
+    }
+
+    public void OpenLaneFilterModePopup() 
+    {
+        ContextMenuListAction option(String label, LaneFilterMode value) {
+            return new ContextMenuListAction(label, () => {
+                LaneFilterMode = value;
+                SetValues();
+                TimelinePanel.main.UpdateItems();
+            }, _checked: LaneFilterMode == value);
+        }
+        ContextMenuHolder.main.OpenRoot(new ContextMenuList(
+            option("Show all Lanes", LaneFilterMode.All),
+            option("Show Lanes visible in the Hierarchy", LaneFilterMode.HierarchyVisible)
+        ), LaneFilterModeButton, ContextMenuDirection.Up);
     }
 }

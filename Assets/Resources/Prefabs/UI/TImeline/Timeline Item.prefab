@@ -36,7 +36,6 @@ RectTransform:
   - {fileID: 3539771161263551469}
   - {fileID: 1537729226482259936}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.25, y: 1}
   m_AnchorMax: {x: 0.25, y: 1}
@@ -122,8 +121,18 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3539771160069313085}
+  Lane:
+    Storyboard:
+      Timestamps: []
+    Name: 
+    Objects: []
+    LaneSteps: []
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Group: 
+    StyleIndex: 0
   Border: {fileID: 3539771161518149319}
-  Indicator: {fileID: 3539771161263551468}
+  Icon: {fileID: 3539771161263551468}
   SelectedBorder: {fileID: 4067269901588971924}
 --- !u!114 &7890910062405256060
 MonoBehaviour:
@@ -156,7 +165,7 @@ GameObject:
   - component: {fileID: 3539771161263551468}
   - component: {fileID: 463528349599107497}
   m_Layer: 5
-  m_Name: Item
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,12 +184,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3539771160069313083}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2, y: 12}
+  m_SizeDelta: {x: 16, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3539771161263551471
 CanvasRenderer:
@@ -266,7 +274,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3539771160069313083}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -357,7 +364,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3539771160069313083}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
