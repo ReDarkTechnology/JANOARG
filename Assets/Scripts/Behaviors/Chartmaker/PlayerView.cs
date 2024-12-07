@@ -44,8 +44,9 @@ public class PlayerView : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public AudioSource SoundPlayer;
     public AudioClip NormalHitSound;
     public AudioClip CatchHitSound;
-    public AudioClip NormalFlickHitSound;
-    public AudioClip CatchFlickHitSound;
+    public AudioClip FlickSound;
+    public AudioClip AltNormalHitSound;
+    public AudioClip AltCatchHitSound;
     [Space]
     public Graphic NotificationText;
     public Graphic NotificationBox;
@@ -61,6 +62,7 @@ public class PlayerView : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     float CurrentTime;
     
     int[] HitObjectsRemaining = new [] { 0, 0 };
+    int FlicksRemaining = 0;
 
     public HandleDragMode CurrentDragMode;
     bool isDragged;
@@ -184,14 +186,19 @@ public class PlayerView : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             {
                 if (Manager.HitObjectsRemaining[0] < HitObjectsRemaining[0])
                 {
-                    SoundPlayer.PlayOneShot(Chartmaker.Preferences.PerfectHitsounds ? NormalFlickHitSound : NormalHitSound, PlayOptions.HitsoundsVolume);
+                    SoundPlayer.PlayOneShot(Chartmaker.Preferences.PerfectHitsounds ? AltNormalHitSound : NormalHitSound, PlayOptions.HitsoundsVolume);
                 }
                 if (Manager.HitObjectsRemaining[1] < HitObjectsRemaining[1])
                 {
-                    SoundPlayer.PlayOneShot(Chartmaker.Preferences.PerfectHitsounds ? CatchFlickHitSound : CatchHitSound, PlayOptions.HitsoundsVolume);
+                    SoundPlayer.PlayOneShot(Chartmaker.Preferences.PerfectHitsounds ? AltCatchHitSound : CatchHitSound, PlayOptions.HitsoundsVolume);
+                }
+                if (Manager.FlicksRemaining < FlicksRemaining && !Chartmaker.Preferences.PerfectHitsounds)
+                {
+                    SoundPlayer.PlayOneShot(FlickSound, PlayOptions.HitsoundsVolume);
                 }
             }
             HitObjectsRemaining = Manager.HitObjectsRemaining;
+            FlicksRemaining = Manager.FlicksRemaining;
         }
 
         UpdateHandles();

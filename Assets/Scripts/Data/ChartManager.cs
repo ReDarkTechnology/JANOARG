@@ -19,6 +19,7 @@ public class ChartManager
     public float CurrentSpeed;
     public float CurrentTime;
     public int[] HitObjectsRemaining;
+    public int FlicksRemaining;
 
     public int ActiveLaneCount;
     public int ActiveHitCount;
@@ -38,6 +39,7 @@ public class ChartManager
         PalleteManager.Update(CurrentChart.Pallete, pos);
         Camera = (CameraController)CurrentChart.Camera.Get(pos);
         HitObjectsRemaining = new [] { 0, 0 };
+        FlicksRemaining = 0;
         ActiveLaneCount = ActiveHitCount = ActiveLaneVerts = ActiveLaneTris = 0;
 
         for (int a = 0; a < CurrentChart.Groups.Count; a++)
@@ -782,7 +784,11 @@ public class HitObjectManager
         
         if (HoldMesh) MonoBehaviour.DestroyImmediate(HoldMesh);
         
-        if (time <= TimeStart) main.HitObjectsRemaining[(int)data.Type]++;
+        if (time <= TimeStart) 
+        {
+            main.HitObjectsRemaining[(int)data.Type]++;
+            if (data.Flickable) main.FlicksRemaining++;
+        }
 
         if (time <= TimeEnd)
         {
