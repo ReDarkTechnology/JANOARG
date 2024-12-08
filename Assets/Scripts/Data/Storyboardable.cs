@@ -33,8 +33,8 @@ public class Timestamp : IDeepClonable<Timestamp>
 public class TimestampType {
     public string ID;
     public string Name;
-    public Func<IStoryboardable, float> Get;
-    public Action<IStoryboardable, float> Set;
+    public Func<Storyboardable, float> Get;
+    public Action<Storyboardable, float> Set;
 }
 
 [Serializable]
@@ -59,7 +59,7 @@ public class Storyboard
     }
 }
 
-public abstract class IStoryboardable
+public abstract class Storyboardable
 {
     public Storyboard Storyboard = new Storyboard();
 
@@ -67,9 +67,9 @@ public abstract class IStoryboardable
 
     TimestampType[] tts;
     
-    public IStoryboardable Get(float time) {
+    public Storyboardable Get(float time) {
         if (tts == null) tts = (TimestampType[])this.GetType().GetField("TimestampTypes").GetValue(null);
-        IStoryboardable obj = (IStoryboardable)this.MemberwiseClone();
+        Storyboardable obj = (Storyboardable)this.MemberwiseClone();
         foreach(TimestampType tst in tts) try {
             List<Timestamp> sb = Storyboard.FromType(tst.ID);
             float value = tst.Get(this);

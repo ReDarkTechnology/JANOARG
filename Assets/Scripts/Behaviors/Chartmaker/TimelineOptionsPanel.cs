@@ -24,6 +24,8 @@ public class TimelineOptionsPanel : MonoBehaviour
     public TMP_InputField VerticalScaleField;
     public TMP_InputField VerticalOffsetField;
     public RectTransform LaneFilterModeButton;
+    public GameObject LaneFilterModeInactiveIcon;
+    public GameObject LaneFilterModeActiveIcon;
     public TMP_InputField SpeedField;
     public TMP_InputField SeparatorField;
     public Toggle FollowSeekLineToggle;
@@ -39,12 +41,14 @@ public class TimelineOptionsPanel : MonoBehaviour
     {
         GetValues();
         SetValues();
+        UpdateUI();
     }
 
     public void OnEnable()
     {
         recursionBuster = true;
         UpdateFields();
+        UpdateUI();
         recursionBuster = false;
     }
 
@@ -126,6 +130,12 @@ public class TimelineOptionsPanel : MonoBehaviour
         for (int a = 0; a < WaveformModeToggles.Count; a++) WaveformModeToggles[a].isOn = a == WaveformMode;
     }
 
+    public void UpdateUI() 
+    {
+        LaneFilterModeActiveIcon.SetActive(LaneFilterMode != LaneFilterMode.All);
+        LaneFilterModeInactiveIcon.SetActive(LaneFilterMode == LaneFilterMode.All);
+    }
+
     public void OnFieldSet()
     {
         if (recursionBuster) return;
@@ -169,6 +179,7 @@ public class TimelineOptionsPanel : MonoBehaviour
             return new ContextMenuListAction(label, () => {
                 LaneFilterMode = value;
                 SetValues();
+                UpdateUI();
                 TimelinePanel.main.UpdateItems();
             }, _checked: LaneFilterMode == value);
         }

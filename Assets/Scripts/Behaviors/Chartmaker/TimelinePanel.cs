@@ -39,6 +39,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public RectTransform PeekEndSlider;
     public RectTransform SongStartRect;
     public RectTransform SongEndRect;
+    public RectTransform LaneStartRect;
+    public RectTransform LaneEndRect;
     public RectTransform TicksHolder;
     public RectTransform ItemsHolder;
     public RectTransform TailsHolder;
@@ -285,6 +287,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                 Ticks.RemoveAt(Ticks.Count - 1);
             }
 
+            // Update border rects
             SongStartRect.anchorMax = new (
                 Mathf.InverseLerp(PeekRange.x, PeekRange.y, 0), 
                 SongStartRect.anchorMax.y
@@ -381,7 +384,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         if (CurrentMode == TimelineMode.Storyboard)
         {
-            if (InspectorPanel.main.CurrentObject is IStoryboardable thing)
+            if (InspectorPanel.main.CurrentObject is Storyboardable thing)
             {
                 TimestampType[] types = (TimestampType[])thing.GetType().GetField("TimestampTypes").GetValue(null);
                 Storyboard sb = thing.Storyboard;
@@ -480,7 +483,14 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     }
                 }
 
-                foreach (Lane lane in lanes)
+                if (lanes.Count == 0 && Chartmaker.main.CurrentChart.Lanes.Count > 0)
+                {
+                    Blocker.SetActive(true);
+                    BlockerLabel.text = 
+                        "Your Lane filter settings are filtering all Lanes in your Chart."
+                        + "\nTry adjusting your Lane filter settings.";
+                }
+                else foreach (Lane lane in lanes)
                 {
                     float time = metronome.ToSeconds(lane.LaneSteps[0].Offset);
                     float timeEnd = metronome.ToSeconds(lane.LaneSteps[^1].Offset);
@@ -627,6 +637,24 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         {
             ItemHeight = times.Count;
             UpdateScrollbar();
+        }
+
+        if (InspectorPanel.main.CurrentHierarchyObject is Lane activeLane &&
+            (CurrentMode is TimelineMode.LaneSteps or TimelineMode.HitObjects))
+        {
+            LaneStartRect.anchorMax = new (
+                Mathf.InverseLerp(PeekRange.x, PeekRange.y, metronome.ToSeconds(activeLane.LaneSteps[0].Offset)), 
+                LaneStartRect.anchorMax.y
+            );
+            LaneEndRect.anchorMin = new (
+                Mathf.InverseLerp(PeekRange.x, PeekRange.y, metronome.ToSeconds(activeLane.LaneSteps[^1].Offset)), 
+                LaneEndRect.anchorMin.y
+            );
+        }
+        else 
+        {
+            LaneStartRect.anchorMax = SongStartRect.anchorMax;
+            LaneEndRect.anchorMin = SongEndRect.anchorMin;
         }
     }
 
@@ -1295,7 +1323,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             {
                 case TimelineMode.Storyboard:
                 {
-                    if (InspectorPanel.main.CurrentObject is not IStoryboardable thing) break;
+                    if (InspectorPanel.main.CurrentObject is not Storyboardable thing) break;
 
                     TimestampType[] types = (TimestampType[])thing.GetType().GetField("TimestampTypes").GetValue(null);
                     Storyboard sb = thing.Storyboard;
@@ -1380,7 +1408,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                 {
                     case TimelinePickerMode.Timestamp:
                     {
-                        if (InspectorPanel.main.CurrentObject is not IStoryboardable thing) break;
+                        if (InspectorPanel.main.CurrentObject is not Storyboardable thing) break;
 
                         TimestampType[] types = (TimestampType[])thing.GetType().GetField("TimestampTypes").GetValue(null);
                         Storyboard sb = thing.Storyboard;

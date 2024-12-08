@@ -56,7 +56,7 @@ public class JACEncoder
         return str;
     }
 
-    public static string EncodeStoryboard(IStoryboardable storyboard, int depth = 0)
+    public static string EncodeStoryboard(Storyboardable storyboard, int depth = 0)
     {
         return EncodeStoryboard(storyboard.Storyboard, depth);
     }

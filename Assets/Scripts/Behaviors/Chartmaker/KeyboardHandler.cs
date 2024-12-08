@@ -153,7 +153,7 @@ public class KeyboardHandler : MonoBehaviour
             Keybind = new Keybind(KeyCode.A, EventModifiers.Command),
             Invoke = () => { 
                 if (TimelinePanel.main.CurrentMode == TimelineMode.Storyboard) {
-                    if (InspectorPanel.main.CurrentObject is IStoryboardable) InspectorPanel.main.SetObject(((IStoryboardable)InspectorPanel.main.CurrentObject).Storyboard.Timestamps.FindAll(x => true));
+                    if (InspectorPanel.main.CurrentObject is Storyboardable) InspectorPanel.main.SetObject(((Storyboardable)InspectorPanel.main.CurrentObject).Storyboard.Timestamps.FindAll(x => true));
                 } else if (TimelinePanel.main.CurrentMode == TimelineMode.Lanes) {
                     if (Chartmaker.main.CurrentChart != null) InspectorPanel.main.SetObject(Chartmaker.main.CurrentChart.Lanes.FindAll(x => true));
                 } else if (TimelinePanel.main.CurrentMode == TimelineMode.LaneSteps) {

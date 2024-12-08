@@ -517,7 +517,7 @@ public class Chartmaker : MonoBehaviour
 
     public IList GetListTarget(object obj) => obj switch {
         IList list  => list.Count > 0 ? GetListTarget(list[0]) : throw new ArgumentException("Can't determine list target of an empty list"),
-        Timestamp   => ((IStoryboardable)InspectorPanel.main.CurrentObject).Storyboard.Timestamps,
+        Timestamp   => ((Storyboardable)InspectorPanel.main.CurrentObject).Storyboard.Timestamps,
         BPMStop     => CurrentSong.Timing.Stops,
         LaneStyle   => CurrentChart.Pallete.LaneStyles,
         HitStyle    => CurrentChart.Pallete.HitStyles,
@@ -607,7 +607,7 @@ public class Chartmaker : MonoBehaviour
             foreach (object item in list)
             {
                 field.SetValue(item, (BeatPosition)field.GetValue(item) + offset);
-                if (item is IStoryboardable isb)
+                if (item is Storyboardable isb)
                 {
                     foreach (Timestamp ts in isb.Storyboard.Timestamps) ts.Offset += offset;
                 }

@@ -1340,6 +1340,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Filter Filled
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 416
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c47cd787e22af0afcbd683c33c37c61f
+      internalID: -1775433027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1371,6 +1392,7 @@ TextureImporter:
       External Link: -7162714
       File: 1622769349
       Filter: -2139277041
+      Filter Filled: -1775433027
       Folder: -117557889
       Github Icon: 1533055934
       Group: 441202879

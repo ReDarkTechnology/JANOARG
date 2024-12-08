@@ -179,7 +179,7 @@ public class NavigationBar : MonoBehaviour
     {
         IList list = InspectorPanel.main.CurrentObject is IList li ? li : new List<object> { InspectorPanel.main.CurrentObject };
         if (TimelinePanel.main.CurrentMode == TimelineMode.Storyboard) {
-            if (InspectorPanel.main.CurrentObject is IStoryboardable) InspectorPanel.main.SetObject(((IStoryboardable)InspectorPanel.main.CurrentObject).Storyboard.Timestamps.FindAll(x => InspectorPanel.main.CurrentTimestamp?.Contains(x) == false));
+            if (InspectorPanel.main.CurrentObject is Storyboardable) InspectorPanel.main.SetObject(((Storyboardable)InspectorPanel.main.CurrentObject).Storyboard.Timestamps.FindAll(x => InspectorPanel.main.CurrentTimestamp?.Contains(x) == false));
         } else if (TimelinePanel.main.CurrentMode == TimelineMode.Lanes) {
             if (Chartmaker.main.CurrentChart != null) InspectorPanel.main.SetObject(Chartmaker.main.CurrentChart.Lanes.FindAll(x => !list.Contains(x)));
         } else if (TimelinePanel.main.CurrentMode == TimelineMode.LaneSteps) {
