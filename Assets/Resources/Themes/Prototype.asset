@@ -132,6 +132,10 @@ MonoBehaviour:
   - Key: GraphLine
     Value: {r: 1, g: 0.69803923, b: 0, a: 1}
   - Key: TimelineBackgroundStart
-    Value: {r: 1, g: 0, b: 0, a: 0.101960786}
+    Value: {r: 1, g: 0, b: 0, a: 0.050980393}
   - Key: TimelineBackgroundEnd
-    Value: {r: 0, g: 0.25, b: 1, a: 0.101960786}
+    Value: {r: 0, g: 0.25, b: 1, a: 0.050980393}
+  - Key: TimelineBorderStart
+    Value: {r: 1, g: 0, b: 0, a: 0.5019608}
+  - Key: TimelineBorderEnd
+    Value: {r: 0.25, g: 0.31176484, b: 1, a: 0.5019608}

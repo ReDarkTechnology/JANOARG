@@ -12507,7 +12507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 526251942}
-  ID: BorderNormal
+  ID: TimelineBorderEnd
 --- !u!114 &526251942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13258,7 +13258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 553931694}
-  ID: BorderNormal
+  ID: TimelineBorderStart
 --- !u!114 &553931694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40615,7 +40615,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 4, y: 0}
+  m_SizeDelta: {x: 8, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1653172021
 MonoBehaviour:
@@ -40630,7 +40630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 1653172022}
-  ID: BorderHighlighted
+  ID: TimelineBorderStart
 --- !u!114 &1653172022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48337,7 +48337,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 4, y: 0}
+  m_SizeDelta: {x: 8, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1926011758
 MonoBehaviour:
@@ -48352,7 +48352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 1926011759}
-  ID: BorderHighlighted
+  ID: TimelineBorderEnd
 --- !u!114 &1926011759
 MonoBehaviour:
   m_ObjectHideFlags: 0
