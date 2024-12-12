@@ -4,7 +4,6 @@ Shader "UI/Line Graph"
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
-        _CutoffThreshold ("Cutoff Threshold", Float) = 140
 
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
@@ -102,19 +101,22 @@ Shader "UI/Line Graph"
             {
                 half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * IN.color;
 
+                float2 lres = float2(1 / _Resolution.x, 1 / _Resolution.y);
+
                 float colPos = IN.texcoord.x * 63;
                 float yValSlope = _Values[ceil(colPos)] - _Values[floor(colPos)];
                 float yVal = _Values[floor(colPos)] + (yValSlope) * (colPos % 1);
 
-                float colPrevPos = (IN.texcoord.x - 1 / + _Resolution.x) * 63;
+                float colPrevPos = colPos - lres.x * 63;
                 float yPrevValSlope = _Values[ceil(colPrevPos)] - _Values[floor(colPrevPos)];
                 float yPrevVal = _Values[floor(colPrevPos)] + (yPrevValSlope) * (colPrevPos % 1);
 
                 float yLineCenter = (yVal + yPrevVal) / 2;
-                float yLineHeight = max(abs(yVal - yPrevVal), 1.0 / _Resolution.y) / 2;
+                float yLineHeight = max(abs(yVal - yPrevVal), lres.y) / 2;
                 
-                if (abs(IN.texcoord.y - yLineCenter) < yLineHeight) color.a = 1;
-                else color.a = 0;
+                if (abs(IN.texcoord.y - yLineCenter) < yLineHeight) color.a *= 1;
+                else if (abs(IN.texcoord.y - yLineCenter) * 0.5 < yLineHeight) color.a *= 0.5;
+                else color.a *= 0;
 
                 #ifdef UNITY_UI_CLIP_RECT
                 color.a *= UnityGet2DClipping(IN.worldPos.xy, _ClipRect);
