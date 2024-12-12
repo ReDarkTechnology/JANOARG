@@ -468,20 +468,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             {
                 float dOffset = 11 * density;
 
-                List<Lane> lanes = null;
-
-                if (LaneFilterMode == LaneFilterMode.All)
-                {
-                    lanes = Chartmaker.main.CurrentChart.Lanes;
-                }
-                else if (LaneFilterMode == LaneFilterMode.HierarchyVisible)
-                {
-                    lanes = new();
-                    foreach(HierarchyItemHolder item in HierarchyPanel.main.Holders)
-                    {
-                        if (item.Target.Target is Lane lane) lanes.Add(lane);
-                    }
-                }
+                List<Lane> lanes = GetLanesInTimeline();
 
                 if (lanes.Count == 0 && Chartmaker.main.CurrentChart.Lanes.Count > 0)
                 {
@@ -655,6 +642,28 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         {
             LaneStartRect.anchorMax = SongStartRect.anchorMax;
             LaneEndRect.anchorMin = SongEndRect.anchorMin;
+        }
+    }
+
+    private List<Lane> GetLanesInTimeline()
+    {
+        if (LaneFilterMode == LaneFilterMode.All)
+        {
+            return Chartmaker.main.CurrentChart.Lanes;
+        }
+        else if (LaneFilterMode == LaneFilterMode.HierarchyVisible)
+        {
+            List<Lane> lanes = new();
+            foreach(HierarchyItemHolder item in HierarchyPanel.main.Holders)
+            {
+                if (item.Target.Target is Lane lane) lanes.Add(lane);
+            }
+            lanes.Sort((x, y) => x.LaneSteps[0].Offset.CompareTo(y.LaneSteps[0].Offset));
+            return lanes;
+        }
+        else 
+        {
+            return null;
         }
     }
 
@@ -1352,7 +1361,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                 {
                     if (Chartmaker.main.CurrentChart == null) break;
 
-                    list = Chartmaker.main.CurrentChart.Lanes.FindAll(x =>
+                    list = GetLanesInTimeline().FindAll(x =>
                     {
                         return x.LaneSteps[0].Offset >= beatStart && x.LaneSteps[0].Offset <= beatEnd;
                     });
@@ -1702,6 +1711,28 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             new ContextMenuListAction("Delete", () => KeyboardHandler.main.Keybindings["ED:Delete"].Invoke(), KeyOf("ED:Delete"), 
                 _enabled: Chartmaker.main.CanCopy())
         ), (RectTransform)item.transform, ContextMenuDirection.Cursor);
+    }
+
+    public void SelectAdjacent(int direction)
+    {
+        IList targetList = 
+            InspectorPanel.main.CurrentTimestamp?.Count > 0 ? ((Storyboardable)InspectorPanel.main.CurrentObject).Storyboard.Timestamps
+            : InspectorPanel.main.CurrentObject switch {
+                BPMStop => Chartmaker.main.CurrentSong.Timing.Stops,
+                Lane => GetLanesInTimeline(),
+                LaneStep => ((Lane)InspectorPanel.main.CurrentHierarchyObject).LaneSteps,
+                HitObject => ((Lane)InspectorPanel.main.CurrentHierarchyObject).Objects,
+                _ => null,
+            };
+        if (targetList == null) return;
+
+        object currentObj = InspectorPanel.main.CurrentTimestamp?.Count > 0 
+            ? InspectorPanel.main.CurrentTimestamp
+            : InspectorPanel.main.CurrentObject;
+        if (currentObj is IList curObjList) currentObj = curObjList[direction > 0 ? ^1 : 0];
+
+        int index = targetList.IndexOf(currentObj) + direction;
+        if (index >= 0 && index < targetList.Count) InspectorPanel.main.SetObject(targetList[index]);
     }
 }
 

@@ -88,68 +88,42 @@ public class KeyboardHandler : MonoBehaviour
             Invoke = () => Chartmaker.main.Redo(),
         }},
 
-        // -------------------------------------------------- Hierarchy
+        // -------------------------------------------------- Selection
         { "SE:PreviousLane", new KeybindAction {
-            Category = "Hierarchy",
-            Name = "Previous Item",
-            Keybind = new Keybind(KeyCode.UpArrow),
+            Category = "Select",
+            Name = "Previous in Hierarchy",
+            Keybind = new Keybind(KeyCode.W),
             Invoke = () => {
-                if (InspectorPanel.main.CurrentHierarchyObject is Lane lane)
-                {
-                    var lanes = Chartmaker.main.CurrentChart.Lanes;
-                    int index = lanes.IndexOf(lane);
-                    InspectorPanel.main.SetObject(lanes[Mathf.Max(index - 1, 0)]);
-                }
+                HierarchyPanel.main.SelectAdjacent(-1);
             },
         }},
         { "SE:NextLane", new KeybindAction {
-            Category = "Hierarchy",
-            Name = "Next Item",
-            Keybind = new Keybind(KeyCode.DownArrow),
+            Category = "Select",
+            Name = "Next in Hierarchy",
+            Keybind = new Keybind(KeyCode.S),
             Invoke = () => {
-                if (InspectorPanel.main.CurrentHierarchyObject is Lane lane)
-                {
-                    var lanes = Chartmaker.main.CurrentChart.Lanes;
-                    int index = lanes.IndexOf(lane);
-                    InspectorPanel.main.SetObject(lanes[Mathf.Min(index + 1, lanes.Count - 1)]);
-                }
+                HierarchyPanel.main.SelectAdjacent(1);
             },
         }},
-
-        // -------------------------------------------------- Timeline
-        { "TL:Timing", new KeybindAction {
-            Category = "Timeline",
-            Name = "Timing Tab",
-            Keybind = new Keybind(KeyCode.BackQuote),
-            Invoke = () => TimelinePanel.main.SetTabMode(TimelineMode.Timing),
+        { "SE:PreviousTimeline", new KeybindAction {
+            Category = "Select",
+            Name = "Previous in Timeline",
+            Keybind = new Keybind(KeyCode.A),
+            Invoke = () => {
+                TimelinePanel.main.SelectAdjacent(-1);
+            },
         }},
-        { "TL:Storyboard", new KeybindAction {
-            Category = "Timeline",
-            Name = "Storyboard Tab",
-            Keybind = new Keybind(KeyCode.Alpha1),
-            Invoke = () => TimelinePanel.main.SetTabMode(TimelineMode.Storyboard),
-        }},
-        { "TL:Lanes", new KeybindAction {
-            Category = "Timeline",
-            Name = "Lanes Tab",
-            Keybind = new Keybind(KeyCode.Alpha2),
-            Invoke = () => TimelinePanel.main.SetTabMode(TimelineMode.Lanes),
-        }},
-        { "TL:LaneStep", new KeybindAction {
-            Category = "Timeline",
-            Name = "Lane Steps Tab",
-            Keybind = new Keybind(KeyCode.Alpha3),
-            Invoke = () => TimelinePanel.main.SetTabMode(TimelineMode.LaneSteps),
-        }},
-        { "TL:HitObjects", new KeybindAction {
-            Category = "Timeline",
-            Name = "Hit Objects Tab",
-            Keybind = new Keybind(KeyCode.Alpha4),
-            Invoke = () => TimelinePanel.main.SetTabMode(TimelineMode.HitObjects),
+        { "SE:NextTimeline", new KeybindAction {
+            Category = "Select",
+            Name = "Next in Timeline",
+            Keybind = new Keybind(KeyCode.D),
+            Invoke = () => {
+                TimelinePanel.main.SelectAdjacent(1);
+            },
         }},
         { "ED:SelectAll", new KeybindAction {
-            Category = "Timeline",
-            Name = "Select All",
+            Category = "Select",
+            Name = "Entire Timeline",
             Keybind = new Keybind(KeyCode.A, EventModifiers.Command),
             Invoke = () => { 
                 if (TimelinePanel.main.CurrentMode == TimelineMode.Storyboard) {
@@ -162,6 +136,71 @@ public class KeyboardHandler : MonoBehaviour
                     if (InspectorPanel.main.CurrentHierarchyObject is Lane lane) InspectorPanel.main.SetObject(lane.Objects.FindAll(x => true));
                 } else if (TimelinePanel.main.CurrentMode == TimelineMode.Timing) {
                     if (Chartmaker.main.CurrentSong != null) InspectorPanel.main.SetObject(Chartmaker.main.CurrentSong.Timing.Stops.FindAll(x => true));
+                }
+            },
+        }},
+
+        // -------------------------------------------------- Hierarchy
+        { "HR:SongView", new KeybindAction {
+            Category = "Hierarchy",
+            Name = "Playable Song Mode",
+            Keybind = new Keybind(KeyCode.Alpha1, EventModifiers.Shift),
+            Invoke = () => {
+                HierarchyPanel.main.SetMode(HierarchyMode.PlayableSong);
+            },
+        }},
+        { "HR:ChartView", new KeybindAction {
+            Category = "Hierarchy",
+            Name = "Chart Mode",
+            Keybind = new Keybind(KeyCode.Alpha2, EventModifiers.Shift),
+            Invoke = () => {
+                HierarchyPanel.main.SetMode(HierarchyMode.Chart);
+            },
+        }},
+
+        // -------------------------------------------------- Timeline
+        { "TL:Tab1", new KeybindAction {
+            Category = "Timeline",
+            Name = "1st Tab",
+            Keybind = new Keybind(KeyCode.Alpha1),
+            Invoke = () => {
+                switch (HierarchyPanel.main.CurrentMode)  
+                {
+                    case HierarchyMode.PlayableSong: TimelinePanel.main.SetTabMode(TimelineMode.Timing); break;
+                    case HierarchyMode.Chart: TimelinePanel.main.SetTabMode(TimelineMode.Storyboard); break;
+                }
+            },
+        }},
+        { "TL:Tab2", new KeybindAction {
+            Category = "Timeline",
+            Name = "2nd Tab",
+            Keybind = new Keybind(KeyCode.Alpha2),
+            Invoke = () => {
+                switch (HierarchyPanel.main.CurrentMode)  
+                {
+                    case HierarchyMode.Chart: TimelinePanel.main.SetTabMode(TimelineMode.Lanes); break;
+                }
+            },
+        }},
+        { "TL:Tab3", new KeybindAction {
+            Category = "Timeline",
+            Name = "3rd Tab",
+            Keybind = new Keybind(KeyCode.Alpha3),
+            Invoke = () => {
+                switch (HierarchyPanel.main.CurrentMode)  
+                {
+                    case HierarchyMode.Chart: TimelinePanel.main.SetTabMode(TimelineMode.LaneSteps); break;
+                }
+            },
+        }},
+        { "TL:Tab4", new KeybindAction {
+            Category = "Timeline",
+            Name = "4th Tab",
+            Keybind = new Keybind(KeyCode.Alpha4),
+            Invoke = () => {
+                switch (HierarchyPanel.main.CurrentMode)  
+                {
+                    case HierarchyMode.Chart: TimelinePanel.main.SetTabMode(TimelineMode.HitObjects); break;
                 }
             },
         }},

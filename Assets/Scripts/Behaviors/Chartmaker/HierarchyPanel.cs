@@ -43,6 +43,8 @@ public class HierarchyPanel : MonoBehaviour
 
     public void SetMode(HierarchyMode mode)
     {
+        if (CurrentMode == mode) return;
+        if (CurrentMode == HierarchyMode.Chart && Chartmaker.main.CurrentChart == null) return;
         CurrentMode = mode;
         InspectorPanel.main.SetObject(null);
         InformationBar.main.UpdateButtonActivity();
@@ -299,6 +301,21 @@ public class HierarchyPanel : MonoBehaviour
     public void Select(HierarchyItem item) 
     {
         if (item.Target != null) InspectorPanel.main.SetObject(item.Target);
+    }
+
+    public void SelectAdjacent(int direction)
+    {
+        int i = Holders.FindIndex(x => x.SelectedBackground.activeSelf);
+        if (i < 0) return;
+        var a = Holders[i];
+        for (i += direction; i >= 0 && i < Holders.Count; i += direction)
+        {
+            if (Holders[i].Target.Type == a.Target.Type) 
+            {
+                InspectorPanel.main.SetObject(Holders[i].Target.Target);
+                break;
+            }
+        }
     }
 
     public void RightClickSelect(HierarchyItem item, HierarchyItemHolder holder) 
