@@ -367,7 +367,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
             return pos;
         }
-        TimelineItem AddItemNormal(object obj, float time, float size = 22)
+        TimelineItem AddItemNormal(object obj, float time, float size = 20)
         {
             TimelineItem item = null;
             int pos = AddTime(time, size + 2) - ScrollOffset;
@@ -376,8 +376,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             {
                 item = AddItem(obj, time);
                 RectTransform rt = (RectTransform)item.transform;
-                rt.anchoredPosition = new(0, -24 * pos - 5);
-                rt.sizeDelta = new(size, 22);
+                rt.anchoredPosition = new(0, -24 * pos - 6);
+                rt.sizeDelta = new(size, 20);
             }
             return item;
         }
@@ -400,7 +400,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                         TMP_Text label = GetStoryboardEntry(index);
                         RectTransform rt = label.rectTransform;
                         label.text = types[a].Name;
-                        rt.anchoredPosition = new(0, -24 * index - 5);
+                        rt.anchoredPosition = new(0, -24 * index - 4);
                         sbcount++;
                     }
                 }
@@ -422,8 +422,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                         RectTransform trt = tail.rectTransform;
                         trt.anchorMin = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, time), 1);
                         trt.anchorMax = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, timeEnd), 1);
-                        trt.anchoredPosition = new(0, -24 * index - 5);
-                        trt.sizeDelta = new(0, 22);
+                        trt.anchoredPosition = new(0, -24 * index - 6);
+                        trt.sizeDelta = new(0, 20);
                         posX = Mathf.Max(posX, Mathf.Min(8 / ItemsHolder.rect.width, Mathf.Max(trt ? trt.anchorMax.x - 4 / ItemsHolder.rect.width : posX, posX)));
                         tcount++;
                     }
@@ -432,8 +432,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     item.Icon.sprite = LineIcon;
                     RectTransform rt = (RectTransform)item.transform;
                     rt.anchorMin = rt.anchorMax = new (posX, 1);
-                    rt.anchoredPosition = new(0, -24 * index - 5);
-                    rt.sizeDelta = new(8, 22);
+                    rt.anchoredPosition = new(0, -24 * index - 6);
+                    rt.sizeDelta = new(6, 20);
                     item.SetItem(ts);
 
                     count++;
@@ -512,8 +512,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                         sitem.Icon.sprite = LineIcon;
                         RectTransform srt = (RectTransform)sitem.transform;
                         srt.anchorMin = srt.anchorMax = new (sposX, 1);
-                        srt.anchoredPosition = new(0, -24 * pos - 5);
-                        srt.sizeDelta = new(8, 22);
+                        srt.anchoredPosition = new(0, -24 * pos - 6);
+                        srt.sizeDelta = new(6, 20);
                         sitem.SetItem(step, lane);
                         
                         count++;
@@ -527,8 +527,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                         RectTransform trt = tail.rectTransform;
                         trt.anchorMin = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, time), 1);
                         trt.anchorMax = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, timeEnd), 1);
-                        trt.anchoredPosition = new(0, -24 * pos - 5);
-                        trt.sizeDelta = new(0, 22);
+                        trt.anchoredPosition = new(0, -24 * pos - 6);
+                        trt.sizeDelta = new(0, 20);
                         posX = Mathf.Max(posX, Mathf.Min(15 / ItemsHolder.rect.width, Mathf.Max(trt ? trt.anchorMax.x - 16 / ItemsHolder.rect.width : posX, posX)));
                         tcount++;
                     }
@@ -537,8 +537,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     item.Icon.sprite = posX != posX2 ? BehindIcon : LineIcon;
                     RectTransform rt = (RectTransform)item.transform;
                     rt.anchorMin = rt.anchorMax = new (posX, 1);
-                    rt.anchoredPosition = new(0, -24 * pos - 5);
-                    rt.sizeDelta = new(22, 22);
+                    rt.anchoredPosition = new(0, -24 * pos - 6);
+                    rt.sizeDelta = new(20, 20);
                     item.SetItem(lane);
                     
                     count++;
@@ -583,8 +583,8 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
                     float start = InverseLerpUnclamped(vpStart, vpEnd, hit.Position);
                     float end = InverseLerpUnclamped(vpStart, vpEnd, hit.Position + hit.Length);
-                    float pos = Mathf.Floor(-start * height) - 2;
-                    float length = Mathf.Floor((end - start) * height) + 4;
+                    float pos = Mathf.Floor(-start * height) - 3;
+                    float length = Mathf.Floor((end - start) * height) + 2;
 
                     if (time != timeEnd)
                     {
@@ -593,7 +593,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                         trt.anchorMin = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, time), 1);
                         trt.anchorMax = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, timeEnd), 1);
                         trt.anchoredPosition = new Vector2(0, pos);
-                        trt.sizeDelta = new Vector2(8, length);
+                        trt.sizeDelta = new Vector2(0, length);
                         tcount++;
                     }
                     if (time < PeekRange.x - dOffset || time > PeekRange.y + dOffset) continue;
@@ -603,7 +603,7 @@ public class TimelinePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                     RectTransform rt = (RectTransform)item.transform;
                     rt.anchorMin = rt.anchorMax = new (InverseLerpUnclamped(PeekRange.x, PeekRange.y, time), 1);
                     rt.anchoredPosition = new Vector2(0, pos);
-                    rt.sizeDelta = new Vector2(8, length);
+                    rt.sizeDelta = new Vector2(6, length);
 
                     item.SetItem(hit);
 

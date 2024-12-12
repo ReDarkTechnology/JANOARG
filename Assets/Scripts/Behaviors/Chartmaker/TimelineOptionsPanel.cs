@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -53,6 +54,11 @@ public class TimelineOptionsPanel : MonoBehaviour
     }
 
     public void OnDisable()
+    {
+        SaveValues();
+    }
+
+    public void SaveValues() 
     {
         if (isDirty)
         {
@@ -177,9 +183,10 @@ public class TimelineOptionsPanel : MonoBehaviour
     {
         ContextMenuListAction option(String label, LaneFilterMode value) {
             return new ContextMenuListAction(label, () => {
+                if (value == LaneFilterMode) return;
                 LaneFilterMode = value;
-                SetValues();
-                UpdateUI();
+                SetValues(); UpdateUI(); 
+                isDirty = true; SaveValues();
                 TimelinePanel.main.UpdateItems();
             }, _checked: LaneFilterMode == value);
         }

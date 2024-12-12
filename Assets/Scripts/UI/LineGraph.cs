@@ -25,9 +25,10 @@ public class LineGraph : MaskableGraphic
 
         Vector2 min = rectTransform.rect.min;
         Vector2 max = rectTransform.rect.max;
+        float height = max.x - min.x;
 
-        float minValue = Mathf.Min(m_Values);
-        float maxValue = Mathf.Max(m_Values) + 1 / (max.x - min.x);
+        float minValue = Mathf.Min(m_Values) - 1 / height;
+        float maxValue = Mathf.Max(m_Values) + 1 / height;
 
 
         UIVertex vert = UIVertex.simpleVert;
@@ -57,9 +58,10 @@ public class LineGraph : MaskableGraphic
         {
             Vector2 min = rectTransform.rect.min;
             Vector2 max = rectTransform.rect.max;
+            float height = max.x - min.x;
 
-            float minValue = Mathf.Min(m_Values);
-            float maxValue = Mathf.Max(m_Values) + 1 / (max.x - min.x);
+            float minValue = Mathf.Min(m_Values) - 1 / height;
+            float maxValue = Mathf.Max(m_Values) + 1 / height;
         
             float[] realValues = new float[Values.Length];
             for (int i = 0; i < realValues.Length; i++) realValues[i] = Mathf.InverseLerp(minValue, maxValue, m_Values[i]);
