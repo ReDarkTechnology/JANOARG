@@ -44,7 +44,7 @@ MonoBehaviour:
   - Key: BorderPressed
     Value: {r: 0, g: 0, b: 0, a: 0.4}
   - Key: BorderSelected
-    Value: {r: 0.2, g: 0.6, b: 0.7, a: 1}
+    Value: {r: 0.2, g: 0.3245098, b: 0.69803923, a: 1}
   - Key: BorderSelectedX
     Value: {r: 0.7, g: 0.2, b: 0.2, a: 1}
   - Key: BorderSelectedY
@@ -90,9 +90,9 @@ MonoBehaviour:
   - Key: TimelineSeekLineBorder
     Value: {r: 0.5, g: 0, b: 0.55, a: 1}
   - Key: TimelineSelectedNormal
-    Value: {r: 0.2, g: 0.6, b: 0.7, a: 0.2}
+    Value: {r: 0.2, g: 0.3245098, b: 0.69803923, a: 0.2}
   - Key: TimelineSelectedBorder
-    Value: {r: 0.2, g: 0.6, b: 0.7, a: 1}
+    Value: {r: 0.2, g: 0.3245098, b: 0.69803923, a: 1}
   - Key: TimelineTickMain
     Value: {r: 0, g: 0, b: 0, a: 1}
   - Key: TimelineTick2

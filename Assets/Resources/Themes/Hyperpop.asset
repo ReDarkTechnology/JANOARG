@@ -92,7 +92,7 @@ MonoBehaviour:
   - Key: TimelineSelectedNormal
     Value: {r: 0, g: 1, b: 1, a: 0.2}
   - Key: TimelineSelectedBorder
-    Value: {r: 0, g: 1, b: 1, a: 1}
+    Value: {r: 0, g: 0.25, b: 1, a: 1}
   - Key: TimelineTickMain
     Value: {r: 0, g: 0, b: 0, a: 1}
   - Key: TimelineTick2
@@ -136,6 +136,6 @@ MonoBehaviour:
   - Key: TimelineBackgroundEnd
     Value: {r: 1, g: 0, b: 0, a: 0.101960786}
   - Key: TimelineBorderStart
-    Value: {r: 1, g: 1, b: 1, a: 1}
+    Value: {r: 0.100000024, g: 0.32500002, b: 1, a: 1}
   - Key: TimelineBorderEnd
-    Value: {r: 1, g: 1, b: 1, a: 1}
+    Value: {r: 1, g: 0, b: 0, a: 1}

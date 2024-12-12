@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -31,6 +32,8 @@ public class FileModal : Modal
     public TMP_Text FileTypeLabel;
 
     [Space]
+    public Sprite HomeIcon;
+    public Sprite UserHomeIcon;
     public Sprite FileIcon;
     public Sprite FolderIcon;
     public Sprite DriveIcon;
@@ -78,27 +81,74 @@ public class FileModal : Modal
 
     public void SetUpBookmarks()
     {
-        List<FileModalEntry> bookmarks = new();
-
-        var drives = Directory.GetLogicalDrives();
-
-        foreach (string drive in drives)
-        {
-            bookmarks.Add(new FileModalEntry {
-                Path = drive,
-                Text = drive,
-                IsFolder = true,
-            });
-        }
-
-        itemHeight = ((RectTransform)ItemSample.transform).sizeDelta.y;
-        BookmarkHolder.sizeDelta = new(BookmarkHolder.sizeDelta.x, bookmarks.Count * itemHeight);
-
-        foreach (FileModalEntry entry in bookmarks)
+        FileModalItem GetItem() 
         {
             FileModalItem item = Instantiate(ItemSample, BookmarkHolder);
             item.Parent = this;
-            SetBookmark(item, entry);
+            return item;
+        }
+        GameObject GetSpace() 
+        {
+            GameObject obj = new GameObject("Space");
+            obj.AddComponent<RectTransform>().sizeDelta = new Vector2(0, 4);
+            obj.transform.SetParent(BookmarkHolder);
+            return obj;
+        }
+
+        FileModalItem item;
+
+        // Local
+        item = GetItem();
+        SetBookmark(item, new FileModalEntry {
+            Path = Path.GetDirectoryName(Application.dataPath),
+            Text = "Local",
+            IsFolder = true,
+        });
+        item.Icon.sprite = HomeIcon;
+
+        GetSpace();
+
+        // Home
+        item = GetItem();
+        string userHomePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        SetBookmark(item, new FileModalEntry {
+            Path = userHomePath,
+            Text = "User Home",
+            IsFolder = true,
+        });
+        item.Icon.sprite = UserHomeIcon;
+
+        Dictionary<Environment.SpecialFolder, string> specialFolders = new () {
+            {Environment.SpecialFolder.Desktop, "Desktop"},
+            {Environment.SpecialFolder.Personal, "Documents"},
+        };
+
+        foreach (var specialFolder in specialFolders) 
+        {
+            string path = Environment.GetFolderPath(specialFolder.Key);
+            if (!String.IsNullOrWhiteSpace(path) && path != userHomePath)
+            {
+                item = GetItem();
+                SetBookmark(item, new FileModalEntry {
+                    Path = path,
+                    Text = specialFolder.Value,
+                    IsFolder = true,
+                });
+                item.Icon.sprite = FolderIcon;
+            }
+        }
+
+        GetSpace();
+    
+        // Drives
+        var drives = DriveInfo.GetDrives();
+        foreach (DriveInfo drive in drives)
+        {
+            SetBookmark(GetItem(), new FileModalEntry {
+                Path = drive.RootDirectory.FullName,
+                Text = drive.VolumeLabel,
+                IsFolder = true,
+            });
         }
     }
 
@@ -255,6 +305,9 @@ public class FileModal : Modal
         item.Button.onClick.AddListener(() => Navigate(entry.Path));
         item.Text.text = entry.Text;
         item.Icon.sprite = DriveIcon;
+
+        var tooltip = item.AddComponent<TooltipTarget>();
+        tooltip.Text = entry.Path;
     }
 
     public void InvokeEntry()

@@ -90,9 +90,9 @@ MonoBehaviour:
   - Key: TimelineSeekLineBorder
     Value: {r: 0.5, g: 0.35, b: 0, a: 1}
   - Key: TimelineSelectedNormal
-    Value: {r: 0.2, g: 0.6, b: 0.7, a: 0.2}
+    Value: {r: 0.2, g: 0.3245098, b: 0.69803923, a: 0.2}
   - Key: TimelineSelectedBorder
-    Value: {r: 0.2, g: 0.6, b: 0.7, a: 1}
+    Value: {r: 0.2, g: 0.3245098, b: 0.69803923, a: 1}
   - Key: TimelineTickMain
     Value: {r: 0, g: 0, b: 0, a: 1}
   - Key: TimelineTick2
@@ -122,7 +122,7 @@ MonoBehaviour:
   - Key: BlockerContent
     Value: {r: 0, g: 0, b: 0, a: 1}
   - Key: HierarchyItemSelected
-    Value: {r: 0.2, g: 0.6, b: 0.69803923, a: 0.2}
+    Value: {r: 0.2, g: 0.3245098, b: 0.69803923, a: 0.2}
   - Key: ProgressBackground
     Value: {r: 0, g: 0, b: 0, a: 0.5019608}
   - Key: ProgressFill
@@ -132,10 +132,10 @@ MonoBehaviour:
   - Key: GraphLine
     Value: {r: 0.5019608, g: 0.34901962, b: 0, a: 1}
   - Key: TimelineBackgroundStart
-    Value: {r: 0.100000024, g: 0.32617804, b: 1, a: 0.101960786}
+    Value: {r: 0.05769229, g: 0.15384601, b: 0.5, a: 0.101960786}
   - Key: TimelineBackgroundEnd
-    Value: {r: 1, g: 0, b: 0, a: 0.101960786}
+    Value: {r: 0.5, g: 0, b: 0, a: 0.101960786}
   - Key: TimelineBorderStart
-    Value: {r: 0, g: 0, b: 0, a: 0.5019608}
+    Value: {r: 0, g: 0, b: 0, a: 0.2509804}
   - Key: TimelineBorderEnd
-    Value: {r: 0, g: 0, b: 0, a: 0.5019608}
+    Value: {r: 0, g: 0, b: 0, a: 0.2509804}
