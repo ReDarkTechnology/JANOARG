@@ -106,6 +106,26 @@ public class FileModal : Modal
         });
         item.Icon.sprite = HomeIcon;
 
+        Dictionary<string, string> localFolders = new () {
+            {"Songs", "Songs"},
+            {"Recordings", "Recordings"},
+        };
+
+        foreach (var specialFolder in localFolders) 
+        {
+            string path = Path.Combine(Path.GetDirectoryName(Application.dataPath), specialFolder.Key);
+            if (Directory.Exists(path))
+            {
+                item = GetItem();
+                SetBookmark(item, new FileModalEntry {
+                    Path = path,
+                    Text = specialFolder.Value,
+                    IsFolder = true,
+                });
+                item.Icon.sprite = FolderIcon;
+            }
+        }
+
         GetSpace();
 
         // Home
@@ -118,12 +138,14 @@ public class FileModal : Modal
         });
         item.Icon.sprite = UserHomeIcon;
 
-        Dictionary<Environment.SpecialFolder, string> specialFolders = new () {
+        Dictionary<Environment.SpecialFolder, string> userFolders = new () {
             {Environment.SpecialFolder.Desktop, "Desktop"},
             {Environment.SpecialFolder.Personal, "Documents"},
+            {Environment.SpecialFolder.MyPictures, "Pictures"},
+            {Environment.SpecialFolder.MyMusic, "Music"},
         };
 
-        foreach (var specialFolder in specialFolders) 
+        foreach (var specialFolder in userFolders) 
         {
             string path = Environment.GetFolderPath(specialFolder.Key);
             if (!String.IsNullOrWhiteSpace(path) && path != userHomePath)

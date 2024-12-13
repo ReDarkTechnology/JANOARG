@@ -1370,7 +1370,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1383,7 +1383,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Home Tilde
+      name: Home User
       rect:
         serializedVersion: 2
         x: 128
@@ -1391,7 +1391,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1412,7 +1412,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1420,6 +1420,27 @@ TextureImporter:
       bones: []
       spriteID: 86cb7d7b2547039c38ee68a06e9f6b4f
       internalID: -1843899653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Up Arrow
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 480
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a953471956a490cf9b61d86766437058
+      internalID: -705145172
       vertices: []
       indices: 
       edges: []
@@ -1465,7 +1486,7 @@ TextureImporter:
       Hit Style: -412229566
       Hitsounds: -707145241
       Home: -504787573
-      Home Tilde: -1524574181
+      Home User: -1524574181
       Icon: -596690377
       Image: -413458045
       Info: 707983950
@@ -1492,6 +1513,7 @@ TextureImporter:
       Star: 653783558
       Twitter Icon: -654048039
       Undo: 50928159
+      Up Arrow: -705145172
       Vertical Offset: -818939314
       Vertical Scale: 2071649
       Warning: 183470163
